@@ -79,7 +79,7 @@ export default defineComponent({
       formData.append('sizeMatcher', sizeMatcher.value);
 
       console.log(Array.from(formData.entries()));
-      await Axios.post('http://localhost:4000', formData, {
+      await Axios.post('http://localhost:4000/pdf', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
