@@ -107,7 +107,7 @@ export default defineComponent({
       // @ts-ignore new Chrome File System API
       const dirHandle = await showDirectoryPicker();
       for await (const entry of dirHandle.values()) {
-        if (entry.kind !== 'file') return;
+        if (entry.kind !== 'file' || !/(?:.pdf$)/.test(entry.name)) return;
         loadedFiles.value.push(entry.name as never);
         const fileHandle = await dirHandle.getFileHandle(entry.name, {
           create: true,
