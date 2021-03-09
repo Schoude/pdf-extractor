@@ -61,14 +61,25 @@ app.post('/export/delete-all', (req, res) => {
     files.forEach((file) => {
       // Node 12.x fs.unlink
       // Node 14.x fs.rm
-      fs.unlink(`../export/${file}`, (err) => {
-        if (err) {
-          res.status(500);
+      if (process.version.includes('v12')) {
+        fs.unlink(`../export/${file}`, (err) => {
+          if (err) {
+            res.status(500);
+            res.send();
+          }
+          res.status(200);
           res.send();
-        }
-        res.status(200);
-        res.send();
-      });
+        });
+      } else {
+        fs.rm(`../export/${file}`, (err) => {
+          if (err) {
+            res.status(500);
+            res.send();
+          }
+          res.status(200);
+          res.send();
+        });
+      }
     });
   });
 });

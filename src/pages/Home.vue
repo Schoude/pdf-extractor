@@ -33,8 +33,10 @@ section.home
         button(@click='openDirectoryHandle') PDFs Ordner auswählen
         .container__button(v-if='files.length > 0')
           button(@click='postData') PDFs abschicken ({{ loadedFiles.length }})
-      .container(v-if='loadedFiles.length > 0')
-        h3 {{ loadedFiles.length }} Dateien
+        .container__button(v-if='files.length > 0')
+          button(@click='clearFiles') Dateien leeren
+      .container(v-if='files.length > 0')
+        h3 {{ files.length }} Dateien
         .loaded-files
           div(v-for='filename of loadedFiles') {{ filename }}
   .col
@@ -133,6 +135,10 @@ export default defineComponent({
       a.remove();
     }
 
+    function clearFiles() {
+      files.value = [];
+    }
+
     onMounted(async () => {
       await fetchExportedFiles();
     });
@@ -147,6 +153,7 @@ export default defineComponent({
       postData,
       exportedFiles,
       onDeleteAllClick,
+      clearFiles,
     };
   },
 });
