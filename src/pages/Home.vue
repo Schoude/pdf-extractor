@@ -61,7 +61,19 @@ section.home
     template(v-if='exportedFiles.length === 0')
       div Keine exportierten Dateien vorhanden.
     template(v-else)
-      .exported-files(v-for='file of exportedFiles') {{ file }}
+      .exported-files
+        template(v-for='file of exportedFiles')
+          .file
+            span {{ file }}
+            button.btn--icon(
+              @click='downLoadFile(file)',
+              title='Datei herunterladen'
+            )
+              svg(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 512 512')
+                path(
+                  d='M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z'
+                ) 
+
       button.btn--delete(@click='onDeleteAllClick') Alle exportierten Dateien löschen
 </template>
 
@@ -130,9 +142,6 @@ export default defineComponent({
           },
         });
         if (res.status === 200) fetchExportedFiles();
-        // if (res.data.file) {
-        //   createDownloadLink(projectName.value, res.data.file.data);
-        // }
       } catch (error) {
         console.log(error.message);
       }
@@ -165,6 +174,19 @@ export default defineComponent({
       loadedFiles.value = [];
     }
 
+    async function downLoadFile(filename: string) {
+      console.log(filename);
+      try {
+        const res = await Axios.get(
+          `http://localhost:4000/download/${filename}`
+        );
+        if (res.status === 200)
+          createDownloadLink(projectName.value, res.data.file.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+
     onMounted(async () => {
       await fetchExportedFiles();
     });
@@ -182,6 +204,7 @@ export default defineComponent({
       exportedFiles,
       onDeleteAllClick,
       clearFiles,
+      downLoadFile,
     };
   },
 });
@@ -288,10 +311,29 @@ section {
 
 .exported-files {
   margin-bottom: 1em;
+  max-height: 300px;
+  padding-right: 1em;
+  @include scrollbar(true);
+
+  .file {
+    margin-bottom: 1em;
+    display: flex;
+    align-items: center;
+
+    span {
+      flex: 1 0 auto;
+      font-weight: 300;
+    }
+
+    * + * {
+      margin-left: 1em;
+    }
+  }
 }
 
 .btn--delete {
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: rgba(220, 20, 60, 0.589);
   }
 }
@@ -299,8 +341,24 @@ section {
 .btn--submit {
   font-weight: 600;
   border-color: rgba(20, 220, 70, 0.363);
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: rgba(20, 220, 70, 0.363);
+  }
+}
+
+.btn--icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    path {
+      fill: white;
+    }
   }
 }
 </style>

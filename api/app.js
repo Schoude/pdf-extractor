@@ -23,6 +23,17 @@ app.get('/export', (req, res) => {
   });
 });
 
+app.get('/download/:fileName', (req, res) => {
+  try {
+    const file = fs.readFileSync(`../export/${req.params.fileName}`);
+    res.status(200);
+    res.send({ file });
+  } catch (error) {
+    res.status(404);
+    res.send({ message: 'File not found' });
+  }
+});
+
 app.post('/pdf', (req, res) => {
   const roomMatcher = new RegExp(req.body.roomMatcher, 'g');
   const sizeMatcher = new RegExp(req.body.sizeMatcher, 'g');
