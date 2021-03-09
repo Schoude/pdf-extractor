@@ -1,6 +1,7 @@
 # Vue 3 + Typescript + Pug + S(C|A)SS + Vue Router 4 + Vite
 
 This template should help get you started developing with Vue 3 and Typescript in Vite.
+
 ## Setup
 
 Install dependencies `npm install`
@@ -10,8 +11,6 @@ Install dependencies `npm install`
 1. Dev Server `npm run dev`
 2. Build App `npm run build`
 3. Preview built App `npm run serve`
-4. Run tests once `npm run test:unit`
-5. Run tests in watch mode `npm run test:unit-watch`
 
 ## Recommended IDE Setup
 
