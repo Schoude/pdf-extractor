@@ -160,81 +160,81 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-  section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-content: center;
-    padding: 1em 2em;
-  }
+section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  padding: 1em 2em;
+}
 
-  .col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    h2 {
-      margin-bottom: 1em;
-    }
-  }
-
-  .container__select {
+.col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  h2 {
     margin-bottom: 1em;
-    display: flex;
-    gap: 1em;
   }
+}
 
-  .container__button {
+.container__select {
+  margin-bottom: 1em;
+  display: flex;
+  gap: 1em;
+}
+
+.container__button {
+  margin-top: 1em;
+}
+
+.form-field {
+  margin-bottom: 1em;
+
+  & + .form-field {
     margin-top: 1em;
   }
 
-  .form-field {
-    margin-bottom: 1em;
-
-    & + .form-field {
-      margin-top: 1em;
-    }
-
-    label,
-    input {
-      display: block;
-    }
-
-    label {
-      margin-bottom: 0.5em;
-    }
-
-    input {
-      background: transparent;
-      color: currentColor;
-      border: 1px solid rgba(255, 255, 255, 0.336);
-      padding: 0.5em;
-      width: 100%;
-      transition: all 0.2s ease;
-
-      &:hover {
-        border: 1px solid rgba(255, 255, 255, 0.5);
-      }
-
-      &:focus {
-        outline: none;
-        background: rgba(black, 0.4);
-        border: 1px solid rgba(255, 255, 255, 1);
-      }
-    }
+  label,
+  input {
+    display: block;
   }
 
-  .loaded-files {
-    max-height: 300px;
-    overflow: auto;
-    padding-right: 1em;
+  label {
+    margin-bottom: 0.5em;
   }
 
-  .exported-files {
-    margin-bottom: 1em;
-  }
+  input {
+    background: transparent;
+    color: currentColor;
+    border: 1px solid rgba(255, 255, 255, 0.336);
+    padding: 0.5em;
+    width: 100%;
+    transition: all 0.2s ease;
 
-  .btn--delete {
     &:hover {
-      background-color: rgba(220, 20, 60, 0.589);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    &:focus {
+      outline: none;
+      background: rgba(black, 0.4);
+      border: 1px solid rgba(255, 255, 255, 1);
     }
   }
+}
+
+.loaded-files {
+  max-height: 300px;
+  overflow: auto;
+  padding-right: 1em;
+}
+
+.exported-files {
+  margin-bottom: 1em;
+}
+
+.btn--delete {
+  &:hover {
+    background-color: rgba(220, 20, 60, 0.589);
+  }
+}
 </style>
