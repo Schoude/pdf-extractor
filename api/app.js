@@ -42,7 +42,7 @@ app.post('/pdf', (req, res) => {
       const file = fs.readFileSync(`../export/${projectName}-units.csv`);
       res.status(200);
       res.send({ file });
-    }, 2000);
+    }, 5000);
   } catch (error) {
     res.status(500);
     res.send();
