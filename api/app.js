@@ -42,7 +42,7 @@ app.post('/pdf', (req, res) => {
       const file = fs.readFileSync(`../export/${projectName}-units.csv`);
       res.status(200);
       res.send({ file });
-    }, 1000);
+    }, 2000);
   } catch (error) {
     res.status(500);
     res.send();
@@ -59,7 +59,9 @@ app.post('/export/delete-all', (req, res) => {
     }
 
     files.forEach((file) => {
-      fs.rm(`../export/${file}`, (err) => {
+      // Node 12.x fs.unlink
+      // Node 14.x fs.rm
+      fs.unlink(`../export/${file}`, (err) => {
         if (err) {
           res.status(500);
           res.send();

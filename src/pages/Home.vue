@@ -8,32 +8,35 @@ section.home
         input#project-name(
           type='text',
           name='project-name',
-          v-model='projectName'
+          v-model.trim='projectName'
         )
       .form-field
         label(for='room-matcher') Matcher Raumanzahl (regex)
         input#room-matcher(
           type='text',
           name='room-matcher',
-          v-model='roomMatcher'
+          v-model.trim='roomMatcher'
         )
-        span 
-          i /{{ roomMatcher }}/g
+        span
+          code /{{ roomMatcher }}/g
       .form-field
         label(for='size-matcher') Matcher Wohnfläche (regex)
         input#size-matcher(
           type='text',
           name='size-matcher',
-          v-model='sizeMatcher'
+          v-model.trim='sizeMatcher'
         )
-        span 
-          i /{{ sizeMatcher }}/g
+        span
+          code /{{ sizeMatcher }}/g
     .container.container__select
-      button(@click='openDirectoryHandle') PDFs Ordner auswählen
+      div
+        button(@click='openDirectoryHandle') PDFs Ordner auswählen
+        .container__button(v-if='files.length > 0')
+          button(@click='postData') PDFs abschicken ({{ loadedFiles.length }})
       .container(v-if='loadedFiles.length > 0')
-        div(v-for='filename of loadedFiles') {{ filename }}
-    .container(v-if='files.length > 0')
-      button(@click='postData') PDFs abschicken
+        h3 {{ loadedFiles.length }} Dateien
+        .loaded-files
+          div(v-for='filename of loadedFiles') {{ filename }}
   .col
     h2 Exportierte Dateien
     template(v-if='exportedFiles.length === 0')
@@ -44,15 +47,15 @@ section.home
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from 'vue';
+import { defineComponent, onMounted, ref, Ref } from 'vue';
 import Axios from 'axios';
 
 export default defineComponent({
   name: 'Home',
   setup() {
-    const projectName = ref('Kronenhöfe');
-    const roomMatcher = ref('\\d Zimmer');
-    const sizeMatcher = ref('Wohnfläche');
+    const projectName = ref('elf-freunde');
+    const roomMatcher = ref('\\d-Zimmer');
+    const sizeMatcher = ref('Gesamt-Wohn-Nutzfläche');
     const loadedFiles = ref([]);
     const files: Ref<File[]> = ref([]);
     const exportedFiles = ref([]);
@@ -66,6 +69,7 @@ export default defineComponent({
       // @ts-ignore new Chrome File System API
       const dirHandle = await showDirectoryPicker();
       for await (const entry of dirHandle.values()) {
+        if (entry.kind !== 'file') return;
         loadedFiles.value.push(entry.name as never);
         const fileHandle = await dirHandle.getFileHandle(entry.name, {
           create: true,
@@ -99,9 +103,9 @@ export default defineComponent({
           },
         });
         if (res.status === 200) fetchExportedFiles();
-        if (res.data.file) {
-          createDownloadLink(projectName.value, res.data.file.data);
-        }
+        // if (res.data.file) {
+        //   createDownloadLink(projectName.value, res.data.file.data);
+        // }
       } catch (error) {
         console.log(error.message);
       }
@@ -129,7 +133,9 @@ export default defineComponent({
       a.remove();
     }
 
-    fetchExportedFiles();
+    onMounted(async () => {
+      await fetchExportedFiles();
+    });
 
     return {
       projectName,
@@ -147,48 +153,81 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding: 1em 2em;
-}
-
-.col {
-  h2 {
-    margin-bottom: 1em;
+  section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    padding: 1em 2em;
   }
-}
 
-.container__select {
-  margin-bottom: 1em;
-  display: flex;
-  gap: 1em;
-}
+  .col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h2 {
+      margin-bottom: 1em;
+    }
+  }
 
-.form-field {
-  margin-bottom: 1em;
+  .container__select {
+    margin-bottom: 1em;
+    display: flex;
+    gap: 1em;
+  }
 
-  & + .form-field {
+  .container__button {
     margin-top: 1em;
   }
 
-  label,
-  input {
-    display: block;
+  .form-field {
+    margin-bottom: 1em;
+
+    & + .form-field {
+      margin-top: 1em;
+    }
+
+    label,
+    input {
+      display: block;
+    }
+
+    label {
+      margin-bottom: 0.5em;
+    }
+
+    input {
+      background: transparent;
+      color: currentColor;
+      border: 1px solid rgba(255, 255, 255, 0.336);
+      padding: 0.5em;
+      width: 100%;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border: 1px solid rgba(255, 255, 255, 0.5);
+      }
+
+      &:focus {
+        outline: none;
+        background: rgba(black, 0.4);
+        border: 1px solid rgba(255, 255, 255, 1);
+      }
+    }
   }
 
-  label {
+  .loaded-files {
+    max-height: 300px;
+    overflow: auto;
+    padding-right: 1em;
+  }
+
+  .exported-files {
     margin-bottom: 1em;
   }
-}
 
-.exported-files {
-  margin-bottom: 1em;
-}
-
-.btn--delete {
-  &:hover {
-    background-color: rgba(220, 20, 60, 0.589);
+  .btn--delete {
+    &:hover {
+      background-color: rgba(220, 20, 60, 0.589);
+    }
   }
-}
 </style>
