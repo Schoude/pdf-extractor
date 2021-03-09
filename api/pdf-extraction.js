@@ -47,14 +47,14 @@ const extractFromPDFBlobs = (files, roomMatcher, sizeMatcher, projectName) => {
   csvHeaders = 'meta/de/name;number_of_rooms;area_size\n';
 };
 
-const saveToCSV = (csvHeaders, projectName) => {
+const saveToCSV = (fileContent, projectName) => {
   if (!fs.existsSync('../export')) {
     fs.mkdirSync('../export');
   }
 
   fs.writeFile(
     `../export/${projectName}-units.csv`,
-    csvHeaders,
+    fileContent,
     'utf8',
     (err) => {
       if (err) throw err;
