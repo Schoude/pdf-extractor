@@ -29,15 +29,18 @@ section.home
         span 
           i /{{ sizeMatcher }}/g
     .container.container__select
-      button(@click.prevent()='openDirectoryHandle') PDFs auswählen
+      button(@click='openDirectoryHandle') PDFs Ordner auswählen
       .container(v-if='loadedFiles.length > 0')
         div(v-for='filename of loadedFiles') {{ filename }}
     .container(v-if='files.length > 0')
-      button(@click.prevent='postData') PDFs abschicken
+      button(@click='postData') PDFs abschicken
   .col
     h2 Exportierte Dateien
-    div(v-if='exportedFiles.length === 0') Keine exportierten Dateien vorhanden.
-    .div(v-else, v-for='file of exportedFiles') {{ file }}
+    template(v-if='exportedFiles.length === 0')
+      div Keine exportierten Dateien vorhanden.
+    template(v-else)
+      .exported-files(v-for='file of exportedFiles') {{ file }}
+      button.btn--delete(@click='onDeleteAllClick') Alle exportierten Dateien löschen
 </template>
 
 <script lang="ts">
@@ -96,9 +99,34 @@ export default defineComponent({
           },
         });
         if (res.status === 200) fetchExportedFiles();
+        if (res.data.file) {
+          createDownloadLink(projectName.value, res.data.file.data);
+        }
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       }
+    }
+
+    async function onDeleteAllClick() {
+      try {
+        const res = await Axios.post('http://localhost:4000/export/delete-all');
+        if (res.status === 200) fetchExportedFiles();
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+
+    function createDownloadLink(filenamePrefix: string, data: ArrayBuffer) {
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.style.display = 'none';
+      const blob = new Blob([new Uint8Array(data)]);
+      const url = window.URL.createObjectURL(blob);
+      a.href = url;
+      a.download = `${filenamePrefix}-units.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
     }
 
     fetchExportedFiles();
@@ -112,6 +140,7 @@ export default defineComponent({
       files,
       postData,
       exportedFiles,
+      onDeleteAllClick,
     };
   },
 });
@@ -150,6 +179,16 @@ section {
 
   label {
     margin-bottom: 1em;
+  }
+}
+
+.exported-files {
+  margin-bottom: 1em;
+}
+
+.btn--delete {
+  &:hover {
+    background-color: rgba(220, 20, 60, 0.589);
   }
 }
 </style>

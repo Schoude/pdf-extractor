@@ -38,14 +38,37 @@ app.post('/pdf', (req, res) => {
       csvHeaders
     );
 
-    res.status(200);
-    res.send();
+    setTimeout(() => {
+      const file = fs.readFileSync(`../export/${projectName}-units.csv`);
+      res.status(200);
+      res.send({ file });
+    }, 1000);
   } catch (error) {
     res.status(500);
     res.send();
   }
 
   csvHeaders = 'meta/de/name;number_of_rooms;area_size\n';
+});
+
+app.post('/export/delete-all', (req, res) => {
+  fs.readdir('../export', (err, files) => {
+    if (err) {
+      res.status(500);
+      res.send();
+    }
+
+    files.forEach((file) => {
+      fs.rm(`../export/${file}`, (err) => {
+        if (err) {
+          res.status(500);
+          res.send();
+        }
+        res.status(200);
+        res.send();
+      });
+    });
+  });
 });
 
 app.listen(port, () => {

@@ -1,6 +1,6 @@
 <template lang="pug">
 nav
-  RouterLink(to='/') HOME
+  h1 PDF UNIT DATA EXTRACTOR
 RouterView
 </template>
 
