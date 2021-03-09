@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
@@ -11,6 +12,16 @@ app.use(cors());
 app.options('*', cors());
 
 app.use(upload.any());
+
+app.get('/export', (req, res) => {
+  fs.readdir('../export', (err, files) => {
+    if (err) {
+      res.status(500);
+    }
+    res.status(200);
+    res.send({ files });
+  });
+});
 
 app.post('/pdf', (req, res) => {
   const roomMatcher = new RegExp(req.body.roomMatcher, 'g');
@@ -27,10 +38,10 @@ app.post('/pdf', (req, res) => {
       csvHeaders
     );
 
-    res.status = 200;
+    res.status(200);
     res.send();
   } catch (error) {
-    res.status = 500;
+    res.status(500);
     res.send();
   }
 
