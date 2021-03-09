@@ -8,6 +8,10 @@ const extractFromPDFBlobs = (files, roomMatcher, sizeMatcher, projectName) => {
     loadingTask.promise.then((doc) => {
       doc.getPage(1).then(async (page) => {
         const txt = await page.getTextContent();
+
+        // Adjust room and size matching in regards to the PDF layout
+        // and the provided RegExp from the frontend request.
+        // txt.items lists all strings present in the PDF
         const room = txt.items
           .find((item) => roomMatcher.test(item.str))
           .str.split('-')[0];
