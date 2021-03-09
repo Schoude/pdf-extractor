@@ -33,7 +33,7 @@ section.home
           span
             code /{{ sizeMatcher }}/g
         .form-field
-          label Etagen-Guids (jede in neuer Zeile)
+          label Etagen-Guids <small>(jede in neuer Zeile - Start mit EG oder KG)</small>
           textarea(
             rows='6',
             cols='50',
@@ -45,13 +45,13 @@ section.home
         div
           button(@click='openDirectoryHandle', tp) PDFs Ordner auswählen
           .container__button(v-if='files.length > 0')
+            button.btn--delete(@click='clearFiles') Dateien leeren
+          .container__button(v-if='files.length > 0')
             button.btn--submit(
               @click.prevent='postData',
               type='submit',
               form='extract-data'
             ) PDFs abschicken ({{ loadedFiles.length }})
-          .container__button(v-if='files.length > 0')
-            button.btn--delete(@click='clearFiles') Dateien leeren
         .container(v-if='files.length > 0')
           h3 {{ files.length }} Dateien
           .loaded-files
@@ -188,6 +188,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@use '../style/scrollbar' as *;
+
 section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -277,9 +279,11 @@ section {
 }
 
 .loaded-files {
-  max-height: 300px;
+  font-weight: 300;
+  max-height: 500px;
   overflow: auto;
   padding-right: 1em;
+  @include scrollbar(true);
 }
 
 .exported-files {
@@ -293,8 +297,10 @@ section {
 }
 
 .btn--submit {
+  font-weight: 600;
+  border-color: rgba(20, 220, 70, 0.363);
   &:hover {
-    background-color: rgba(20, 220, 70, 0.589);
+    background-color: rgba(20, 220, 70, 0.363);
   }
 }
 </style>
