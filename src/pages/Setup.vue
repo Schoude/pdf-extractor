@@ -1,5 +1,5 @@
 <template lang="pug">
-section.home
+section.setup
   .col
     h2 Extrahierungs-Optionen
     .col__content
@@ -83,7 +83,7 @@ import { computed, defineComponent, onMounted, ref, Ref } from 'vue';
 import Axios from 'axios';
 
 export default defineComponent({
-  name: 'Home',
+  name: 'Setup',
   setup() {
     const isLoading = ref(false);
     const projectName = ref('elf-freunde');
