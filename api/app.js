@@ -13,6 +13,8 @@ app.options('*', cors());
 
 app.use(upload.any());
 
+app.use('/', express.static(__dirname + '/dist', { index: 'index.html' }));
+
 app.get('/export', (req, res) => {
   fs.readdir('../export', (err, files) => {
     if (err) {
