@@ -117,25 +117,44 @@ export default defineComponent({
 
       const lineAvg = line()
         // @ts-ignore
-        .x((d, i) => {
-          // @ts-ignore
-          console.log({ x: xScaleMean(d.name) });
+        .x((d) => {
           // @ts-ignore
           return xScaleMean(d.name);
         })
-        .y(() => {
-          console.log({ y: yScale(meanFileSize.value) });
-
-          return yScale(meanFileSize.value);
-        });
-      7;
+        .y(() => yScale(meanFileSize.value));
 
       svg
         .append('path')
         .datum(filesData.value)
         .attr('class', 'mean')
         // @ts-ignore
-        .attr('d', lineAvg);
+        .attr('d', lineAvg)
+        .on('mouseover', function (e) {
+          select(this)
+            .style('stroke-width', '5px')
+            .style('stroke-opacity', '0.8');
+
+          tooltip
+            // @ts-ignore
+            .text(`Ø ${meanFileSize.value / 1000} KB`)
+            .style('opacity', 0.8)
+            .style('left', e.clientX + 0 + 'px')
+            .style('top', e.clientY - 50 + 'px');
+        })
+        .on('mousemove', function (e) {
+          tooltip
+            // @ts-ignore
+            .text(`Ø ${meanFileSize.value / 1000} KB`)
+            .style('opacity', 0.86)
+            .style('left', e.clientX + 0 + 'px')
+            .style('top', e.clientY - 50 + 'px');
+        })
+        .on('mouseout', function () {
+          tooltip.style('opacity', 0);
+          select(this)
+            .style('stroke-width', '2px')
+            .style('stroke-opacity', '0.5');
+        });
     }
 
     onMounted(() => renderBarChart());
@@ -165,6 +184,7 @@ export default defineComponent({
 
 .mean {
   stroke-width: 3px;
+  transition: stroke-width 0.3s ease;
   stroke: $color-danger;
   stroke-opacity: 0.5;
 }
@@ -182,6 +202,20 @@ export default defineComponent({
 }
 
 .tooltip {
+  position: absolute;
+  text-align: left;
+  width: auto;
+  height: auto;
+  padding: 0.5em;
+  font-size: 16px;
+  font-weight: 600;
+  background: rgb(187, 187, 187);
+  border-radius: 0px;
+  pointer-events: none;
+  color: rgb(27, 27, 27);
+}
+
+.tooltip__avg {
   position: absolute;
   text-align: left;
   width: auto;
