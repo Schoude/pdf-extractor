@@ -62,6 +62,10 @@ select {
   font: inherit;
 }
 
+svg * {
+  font-family: inherit;
+}
+
 button {
   cursor: pointer;
   border: none;

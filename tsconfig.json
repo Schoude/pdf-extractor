@@ -11,7 +11,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
-    "types": ["vite/client"]
+    "types": ["vite/client", "d3"]
   },
   "include": [
     "src/**/*.ts",
