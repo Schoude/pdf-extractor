@@ -40,6 +40,11 @@ export default defineComponent({
         }`
       );
 
+      const tooltip = select('body')
+        .append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0);
+
       const xScale = scaleBand()
         .domain(filesData.value.map((d) => d.name))
         .range([margin.left, width - margin.right])
@@ -69,7 +74,28 @@ export default defineComponent({
         .attr('x', (d) => xScale(d.name))
         .attr('y', (d) => yScale(d.value))
         .attr('height', (d) => yScale(0) - yScale(d.value))
-        .attr('width', xScale.bandwidth());
+        .attr('width', xScale.bandwidth())
+        .on('mouseover', function (e, data) {
+          select(this).style('fill', '#2e8c63');
+          tooltip
+            // @ts-ignore
+            .text(`${data.value / 1000} KB`)
+            .style('opacity', 0.8)
+            .style('left', e.clientX + 0 + 'px')
+            .style('top', e.clientY - 50 + 'px');
+        })
+        .on('mousemove', function (e, data) {
+          tooltip
+            // @ts-ignore
+            .text(`${data.value / 1000} KB`)
+            .style('opacity', 0.86)
+            .style('left', e.clientX + 0 + 'px')
+            .style('top', e.clientY - 50 + 'px');
+        })
+        .on('mouseout', function () {
+          tooltip.style('opacity', 0);
+          select(this).style('fill', '#73ba9b');
+        });
 
       // @ts-ignore
       const xAxis = (g) =>
@@ -133,6 +159,7 @@ export default defineComponent({
 }
 
 .bar {
+  transition: fill 0.3s ease;
   fill: #73ba9b;
 }
 
@@ -152,5 +179,19 @@ export default defineComponent({
       transform: translateY(5%) translateX(-4%) rotate(-45deg);
     }
   }
+}
+
+.tooltip {
+  position: absolute;
+  text-align: left;
+  width: auto;
+  height: auto;
+  padding: 0.5em;
+  font-size: 16px;
+  font-weight: 600;
+  background: rgb(187, 187, 187);
+  border-radius: 0px;
+  pointer-events: none;
+  color: rgb(27, 27, 27);
 }
 </style>
