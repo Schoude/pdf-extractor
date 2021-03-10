@@ -52,11 +52,11 @@ section.setup
               type='submit',
               form='extract-data',
               :disabled='isLoading'
-            ) PDFs abschicken ({{ loadedFiles.length }})
+            ) PDFs abschicken ({{ loadedFileNames.length }})
         .container(v-if='files.length > 0')
           h3 {{ files.length }} Dateien geladen
           .loaded-files
-            div(v-for='filename of loadedFiles') {{ filename }}
+            div(v-for='filename of loadedFileNames') {{ filename }}
   .col
     h2 Exportierte Dateien
     template(v-if='exportedFiles.length === 0')
@@ -75,23 +75,29 @@ section.setup
                   d='M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z'
                 ) 
 
-      button.btn--delete(@click='onDeleteAllClick') Alle exportierten Dateien löschen
+      button.btn--delete(@click='deleteAllFiles') Alle exportierten Dateien löschen
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, Ref } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import Axios from 'axios';
+import useFileHandler from '../composables/file-handler';
 
 export default defineComponent({
   name: 'Setup',
   setup() {
+    const {
+      loadedFileNames,
+      fetchExportedFiles,
+      exportedFiles,
+      files,
+      clearFiles,
+      deleteAllFiles,
+    } = useFileHandler();
     const isLoading = ref(false);
     const projectName = ref('elf-freunde');
     const roomMatcher = ref('\\d-Zimmer');
     const sizeMatcher = ref('Gesamt-Wohn-Nutzfläche');
-    const loadedFiles = ref([]);
-    const files: Ref<File[]> = ref([]);
-    const exportedFiles = ref([]);
 
     const floorGuidString = ref(
       'f07d83ac-4cb3-4dba-8e6d-68111609ae2f\nd4656ce9-3137-46c7-b386-b2b67f4c673e\n74e9cf9b-9ec6-4d57-a26a-580dd1562d52\nb18e2bf6-0559-404a-ab11-155c6d30d278\n2140f5e6-8dfc-430a-ab75-b2f858a3c2f7\nbe1d7218-1e3d-432e-9567-dcb69fb2150b'
@@ -100,17 +106,12 @@ export default defineComponent({
       () => floorGuidString.value.split('\n').length
     );
 
-    async function fetchExportedFiles() {
-      const res = await Axios.get('http://localhost:4000/export');
-      exportedFiles.value = res.data.files ?? [];
-    }
-
     async function openDirectoryHandle() {
       // @ts-ignore new Chrome File System API
       const dirHandle = await showDirectoryPicker();
       for await (const entry of dirHandle.values()) {
         if (entry.kind !== 'file' || !/(?:.pdf$)/.test(entry.name)) return;
-        loadedFiles.value.push(entry.name as never);
+        loadedFileNames.value.push(entry.name as string);
         const fileHandle = await dirHandle.getFileHandle(entry.name, {
           create: true,
         });
@@ -152,15 +153,6 @@ export default defineComponent({
       }
     }
 
-    async function onDeleteAllClick() {
-      try {
-        const res = await Axios.post('http://localhost:4000/export/delete-all');
-        if (res.status === 200) fetchExportedFiles();
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
-
     function createDownloadLink(filenamePrefix: string, data: ArrayBuffer) {
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -174,13 +166,7 @@ export default defineComponent({
       a.remove();
     }
 
-    function clearFiles() {
-      files.value = [];
-      loadedFiles.value = [];
-    }
-
     async function downLoadFile(filename: string) {
-      console.log(filename);
       try {
         const res = await Axios.get(
           `http://localhost:4000/download/${filename}`
@@ -204,11 +190,11 @@ export default defineComponent({
       floorGuidString,
       floorsCount,
       openDirectoryHandle,
-      loadedFiles,
+      loadedFileNames,
       files,
       postData,
       exportedFiles,
-      onDeleteAllClick,
+      deleteAllFiles,
       clearFiles,
       downLoadFile,
     };
