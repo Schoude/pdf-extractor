@@ -26,6 +26,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@use './style/style.scss' as *;
+
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -36,7 +38,7 @@ export default defineComponent({
 }
 
 header {
-  background-color: #333;
+  background-color: #0f0e15;
   height: 56px;
   padding: 0 12em;
   display: flex;
@@ -70,6 +72,6 @@ nav {
 .pdf-file {
   display: inline;
   width: 18px;
-  fill: whitesmoke;
+  fill: $color-accent;
 }
 </style>

@@ -217,6 +217,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@use '../style/style' as *;
 @use '../style/scrollbar' as *;
 
 section {
@@ -283,7 +284,7 @@ section {
 
     &:focus {
       outline: none;
-      background: rgba(black, 0.4);
+      background: rgba($color-accent, 0.12);
       border: 1px solid rgba(255, 255, 255, 1);
     }
   }
@@ -302,7 +303,7 @@ section {
 
     &:focus {
       outline: none;
-      background: rgba(black, 0.4);
+      background: rgba($color-accent, 0.12);
       border: 1px solid rgba(255, 255, 255, 1);
     }
   }
@@ -334,43 +335,6 @@ section {
 
     * + * {
       margin-left: 1em;
-    }
-  }
-}
-
-.btn--delete {
-  border-color: rgba(220, 20, 60, 0.363);
-  &:hover,
-  &:focus {
-    background-color: rgba(220, 20, 60, 0.363);
-  }
-}
-
-.btn--submit {
-  font-weight: 600;
-  border-color: rgba(20, 220, 70, 0.363);
-  &:hover,
-  &:focus {
-    background-color: rgba(20, 220, 70, 0.363);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-.btn--icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5em;
-
-  svg {
-    width: 20px;
-    height: 20px;
-    path {
-      fill: white;
     }
   }
 }
