@@ -85,7 +85,7 @@ import useFileHandler from '../composables/file-handler';
 
 export default defineComponent({
   name: 'Setup',
-  setup() {
+  setup: () => {
     const {
       loadedFileNames,
       fetchExportedFiles,

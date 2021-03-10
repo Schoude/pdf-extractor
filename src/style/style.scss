@@ -4,11 +4,12 @@
 $color-accent: #73ba9b;
 $color-danger: #a30000;
 
-a {
+.router-link {
   color: whitesmoke;
   text-decoration: none;
   font-size: 1.1rem;
   font-weight: 600;
+  transition: opacity 0.2s ease;
 
   &::after {
     content: '';
@@ -27,6 +28,11 @@ a {
       width: 100%;
       opacity: 1;
     }
+  }
+
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.2;
   }
 }
 

@@ -1,9 +1,10 @@
-import { ref, Ref } from 'vue';
+import { computed, ref, Ref } from 'vue';
 import Axios from 'axios';
 
 const loadedFileNames: Ref<string[]> = ref([]);
 const files: Ref<File[]> = ref([]);
 const exportedFiles: Ref<string[]> = ref([]);
+const filesLoaded = computed(() => files.value.length > 0);
 
 function useFileHandler() {
   const fetchExportedFiles = async () => {
@@ -30,6 +31,7 @@ function useFileHandler() {
     fetchExportedFiles,
     clearFiles,
     deleteAllFiles,
+    filesLoaded,
   };
 }
 

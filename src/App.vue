@@ -12,16 +12,23 @@ header
       )
     h1 PDF Unit Data Extractor
   nav
-    router-link(to='/') Setup
-    router-link(to='/viz') Viz
+    router-link.router-link(to='/') Setup
+    router-link.router-link(:class='{ disabled: !filesLoaded }', to='/viz') Viz
 RouterView
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import useFileHandler from './composables/file-handler';
 
 export default defineComponent({
   name: 'App',
+  setup: () => {
+    const { filesLoaded } = useFileHandler();
+    return {
+      filesLoaded,
+    };
+  },
 });
 </script>
 
