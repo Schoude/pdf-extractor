@@ -34,16 +34,16 @@ app.get('/download/:fileName', (req, res) => {
   }
 });
 
-app.post('/pdf', (req, res) => {
-  const roomMatcher = new RegExp(req.body.roomMatcher, 'g');
-  const sizeMatcher = new RegExp(req.body.sizeMatcher, 'g');
-  const projectName = req.body.projectName;
-  const floorGuids = req.body.floorGuidString.split('\n');
-
-  const floorsMap = setupFloorsMap(floorGuids);
+app.post('/pdf', async (req, res) => {
+  let status;
+  const roomMatcher = new RegExp(req.body.roomMatcher, 'g'),
+    sizeMatcher = new RegExp(req.body.sizeMatcher, 'g'),
+    projectName = req.body.projectName,
+    floorGuids = req.body.floorGuidString.split('\n'),
+    floorsMap = setupFloorsMap(floorGuids);
 
   try {
-    extractFromPDFBlobs(
+    await extractFromPDFBlobs(
       req.files,
       roomMatcher,
       sizeMatcher,
@@ -51,17 +51,13 @@ app.post('/pdf', (req, res) => {
       floorsMap
     );
 
-    setTimeout(() => {
-      const file = fs.readFileSync(`../export/${projectName}-units.csv`);
-      res.status(200);
-      res.send({ file });
-    }, 5000);
+    status = 200;
   } catch (error) {
-    res.status(500);
+    status = 500;
+  } finally {
+    res.status(status);
     res.send();
   }
-
-  csvHeaders = 'meta/de/name;number_of_rooms;area_size\n';
 });
 
 app.post('/export/delete-all', (req, res) => {

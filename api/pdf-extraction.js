@@ -1,15 +1,18 @@
 const pdf = require('pdfjs-dist/es5/build/pdf');
 const fs = require('fs');
-let csvHeaders = 'meta/de/name;number_of_rooms;area_size;floor;generals\n';
 
-const gardenMatcher = new RegExp(/Garten/, 'g');
-const gardenGuid = 'fcddc2ad-3e74-4e8b-8769-d4ebfa037cc4';
-const roofTerraceMatcher = new RegExp(/Dachterrasse/, 'g');
-const roofTerraceGuid = '0c8dd81e-4403-4435-974d-0e2ec616ea16';
-const terraceMatcher = new RegExp(/terrasse/, 'gi');
-const terraceGuid = 'f3d1f2d7-9ad7-449a-a738-e275eddbba55';
-const loggiaMatcher = new RegExp(/loggia/, 'gi');
-const loggiaGuid = '47b2d9fb-14c3-4215-98af-833b2096eabc';
+const csvHeadersBase =
+    'meta/de/name;number_of_rooms;area_size;floor;generals\n',
+  gardenMatcher = new RegExp(/Garten/, 'g'),
+  gardenGuid = 'fcddc2ad-3e74-4e8b-8769-d4ebfa037cc4',
+  roofTerraceMatcher = new RegExp(/Dachterrasse/, 'g'),
+  roofTerraceGuid = '0c8dd81e-4403-4435-974d-0e2ec616ea16',
+  terraceMatcher = new RegExp(/terrasse/, 'gi'),
+  terraceGuid = 'f3d1f2d7-9ad7-449a-a738-e275eddbba55',
+  loggiaMatcher = new RegExp(/loggia/, 'gi'),
+  loggiaGuid = '47b2d9fb-14c3-4215-98af-833b2096eabc';
+
+let csvHeaders = csvHeadersBase;
 
 // hard to match because other unit's balconies are marked in the PDF
 // const balconyMatcher = new RegExp(/^Balkon$/, 'g');
@@ -20,7 +23,7 @@ const setupFloorsMap = (floorGuids) => {
   return new Map(floorGuids.map((value, index) => [index.toString(), value]));
 };
 
-const extractFromPDFBlobs = (
+const extractFromPDFBlobs = async (
   files,
   roomMatcher,
   sizeMatcher,
@@ -79,7 +82,7 @@ const extractFromPDFBlobs = (
       });
     });
   });
-  csvHeaders = 'meta/de/name;number_of_rooms;area_size;floor;generals\n';
+  csvHeaders = csvHeadersBase;
 };
 
 const saveToCSV = (fileContent, projectName) => {

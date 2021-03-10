@@ -50,7 +50,8 @@ section.home
             button.btn--submit(
               @click.prevent='postData',
               type='submit',
-              form='extract-data'
+              form='extract-data',
+              :disabled='isLoading'
             ) PDFs abschicken ({{ loadedFiles.length }})
         .container(v-if='files.length > 0')
           h3 {{ files.length }} Dateien
@@ -84,6 +85,7 @@ import Axios from 'axios';
 export default defineComponent({
   name: 'Home',
   setup() {
+    const isLoading = ref(false);
     const projectName = ref('elf-freunde');
     const roomMatcher = ref('\\d-Zimmer');
     const sizeMatcher = ref('Gesamt-Wohn-Nutzfläche');
@@ -128,6 +130,7 @@ export default defineComponent({
     }
 
     async function postData() {
+      isLoading.value = true;
       const formData = await setupFormData();
 
       formData.append('projectName', projectName.value);
@@ -144,6 +147,8 @@ export default defineComponent({
         if (res.status === 200) fetchExportedFiles();
       } catch (error) {
         console.log(error.message);
+      } finally {
+        isLoading.value = false;
       }
     }
 
@@ -192,6 +197,7 @@ export default defineComponent({
     });
 
     return {
+      isLoading,
       projectName,
       roomMatcher,
       sizeMatcher,
@@ -346,6 +352,11 @@ section {
   &:hover,
   &:focus {
     background-color: rgba(20, 220, 70, 0.363);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 
