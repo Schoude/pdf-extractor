@@ -54,7 +54,7 @@ section.home
               :disabled='isLoading'
             ) PDFs abschicken ({{ loadedFiles.length }})
         .container(v-if='files.length > 0')
-          h3 {{ files.length }} Dateien
+          h3 {{ files.length }} Dateien geladen
           .loaded-files
             div(v-for='filename of loadedFiles') {{ filename }}
   .col
@@ -243,8 +243,8 @@ section {
 }
 
 .container__select {
-  margin-bottom: 1em;
   display: flex;
+  flex-direction: column;
   gap: 1em;
 }
 
