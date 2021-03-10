@@ -260,6 +260,7 @@ section {
 
   label {
     margin-bottom: 0.5em;
+    font-weight: 600;
   }
 
   input {
@@ -332,9 +333,10 @@ section {
 }
 
 .btn--delete {
+  border-color: rgba(220, 20, 60, 0.363);
   &:hover,
   &:focus {
-    background-color: rgba(220, 20, 60, 0.589);
+    background-color: rgba(220, 20, 60, 0.363);
   }
 }
 
