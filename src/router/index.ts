@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import useFileHandler from '../composables/file-handler';
 import Setup from '../pages/Setup.vue';
+const { filesLoaded } = useFileHandler();
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -11,6 +13,13 @@ const routes: Array<RouteRecordRaw> = [
     path: '/viz',
     name: 'Viz',
     component: () => import('../pages/Viz.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!filesLoaded.value) {
+        next({ name: 'Setup' });
+        return;
+      }
+      next();
+    },
   },
 ];
 
