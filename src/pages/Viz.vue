@@ -92,8 +92,6 @@ export default defineComponent({
         .attr('y', () => yScale(0))
         .attr('height', () => 0)
         .on('mouseover', function (e, data) {
-          console.log(e);
-
           select(this).style('fill', '#2e8c63');
           tooltip
             // @ts-ignore
@@ -122,9 +120,13 @@ export default defineComponent({
 
       // @ts-ignore
       const xAxis = (g) =>
-        g
-          .attr('transform', `translate(0,${height - margin.bottom})`)
-          .call(axisBottom(xScale).tickSizeOuter(0));
+        g.attr('transform', `translate(0,${height - margin.bottom})`).call(
+          axisBottom(xScale)
+            .tickSizeOuter(0)
+            .tickFormat((val) =>
+              val.length > 10 ? `${val.slice(0, 9)}...` : val
+            )
+        );
 
       // @ts-ignore
       const yAxis = (g) =>
