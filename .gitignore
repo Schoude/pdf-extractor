@@ -5,3 +5,4 @@ dist-ssr
 api/dist
 *.local
 export
+coverage

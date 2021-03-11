@@ -11,6 +11,8 @@ Install dependencies `npm install`
 1. Dev Server `npm run dev`
 2. Build App `npm run build`
 3. Preview built App `npm run serve`
+4. Run tests once `npm run test:unit`
+5. Run tests in watch mode `npm run test:unit-watch`
 
 ## Recommended IDE Setup
 
