@@ -3,12 +3,8 @@ import App from '../../App.vue';
 import 'vue-router-mock';
 
 describe('App.vue', () => {
-  it('exists', () => {
+  it('renders the header', () => {
     const w = mount(App);
-    expect(w.exists()).toBe(true);
-  });
-  test('root route', () => {
-    const w = mount(App);
-    expect(w.router.currentRoute.value.path).toBe('/');
+    expect(w.findComponent({ name: 'TheHeader' }).exists()).toBe(true);
   });
 });
