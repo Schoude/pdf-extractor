@@ -27,7 +27,7 @@ const d3 = {
   easeLinear,
 };
 
-import { computed, defineComponent, onMounted } from 'vue';
+import { computed, defineComponent, onBeforeUnmount, onMounted } from 'vue';
 import useFileHandler from '../composables/file-handler';
 
 export default defineComponent({
@@ -192,7 +192,13 @@ export default defineComponent({
         .duration(800);
     }
 
-    onMounted(() => renderBarChart());
+    onMounted(() => {
+      renderBarChart();
+    });
+
+    onBeforeUnmount(() =>
+      document.querySelector('.viz-box__file-size svg')?.remove()
+    );
 
     return { filesData, meanFileSize, height, width };
   },

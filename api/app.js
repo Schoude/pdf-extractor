@@ -13,7 +13,7 @@ app.options('*', cors());
 
 app.use(upload.any());
 
-app.use('/', express.static(__dirname + '/dist', { index: 'index.html' }));
+app.use(express.static(__dirname + '/dist', { index: 'index.html' }));
 
 app.get('/export', (req, res) => {
   fs.readdir('../export', (err, files) => {
@@ -93,6 +93,10 @@ app.post('/export/delete-all', (req, res) => {
       }
     });
   });
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(__dirname + '/dist/index.html');
 });
 
 app.listen(port, () => {
