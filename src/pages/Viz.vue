@@ -10,6 +10,22 @@ import { max } from 'd3-array';
 import { scaleLinear, scaleBand } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { line } from 'd3-shape';
+import { transition } from 'd3-transition';
+import { easeLinear } from 'd3-ease';
+// workaround to get selection.transition() working
+// if 'transition' is no under the same namespace as 'select',
+// then transition() is missing on the selection prototype
+const d3 = {
+  select,
+  max,
+  scaleLinear,
+  scaleBand,
+  axisBottom,
+  axisLeft,
+  line,
+  transition,
+  easeLinear,
+};
 
 import { computed, defineComponent, onMounted } from 'vue';
 import useFileHandler from '../composables/file-handler';
@@ -32,7 +48,7 @@ export default defineComponent({
     });
 
     function renderBarChart() {
-      const svg = select('.viz-box__file-size').append('svg');
+      const svg = d3.select('.viz-box__file-size').append('svg');
       svg.attr(
         'viewBox',
         `0 0 ${width + margin.left + margin.right} ${
@@ -72,10 +88,12 @@ export default defineComponent({
         .join('rect')
         .attr('class', 'bar')
         .attr('x', (d) => xScale(d.name))
-        .attr('y', (d) => yScale(d.value))
-        .attr('height', (d) => yScale(0) - yScale(d.value))
-        .attr('width', xScale.bandwidth())
+        .attr('width', () => xScale.bandwidth())
+        .attr('y', () => yScale(0))
+        .attr('height', () => 0)
         .on('mouseover', function (e, data) {
+          console.log(e);
+
           select(this).style('fill', '#2e8c63');
           tooltip
             // @ts-ignore
@@ -95,7 +113,12 @@ export default defineComponent({
         .on('mouseout', function () {
           tooltip.style('opacity', 0);
           select(this).style('fill', '#73ba9b');
-        });
+        })
+        .transition()
+        .duration(800)
+        .delay(() => Math.random() * 500)
+        .attr('y', (d) => yScale(d.value))
+        .attr('height', (d) => yScale(0) - yScale(d.value));
 
       // @ts-ignore
       const xAxis = (g) =>
@@ -154,7 +177,17 @@ export default defineComponent({
           select(this)
             .style('stroke-width', '2px')
             .style('stroke-opacity', '0.5');
-        });
+        })
+        .attr('stroke-dasharray', function () {
+          return this.getTotalLength() + ' ' + this.getTotalLength();
+        })
+        .attr('stroke-dashoffset', function () {
+          return this.getTotalLength();
+        })
+        .transition()
+        .ease(d3.easeLinear)
+        .attr('stroke-dashoffset', 0)
+        .duration(800);
     }
 
     onMounted(() => renderBarChart());
@@ -201,20 +234,7 @@ export default defineComponent({
   }
 }
 
-.tooltip {
-  position: absolute;
-  text-align: left;
-  width: auto;
-  height: auto;
-  padding: 0.5em;
-  font-size: 16px;
-  font-weight: 600;
-  background: rgb(187, 187, 187);
-  border-radius: 0px;
-  pointer-events: none;
-  color: rgb(27, 27, 27);
-}
-
+.tooltip,
 .tooltip__avg {
   position: absolute;
   text-align: left;
