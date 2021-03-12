@@ -4,7 +4,13 @@ import useFileHandler from '../../composables/file-handler';
 const { exportedFiles } = useFileHandler();
 
 const mockAxiosGet = jest.fn();
-mockAxiosGet.mockReturnValue({ data: { files: ['text.pdf', 'text2.pdf'] } });
+mockAxiosGet.mockReturnValue({
+  data: {
+    files: ['text.pdf', 'text2.pdf'],
+    file: new File([], 'sample.jpg', { type: 'image/png' }),
+  },
+  status: 200,
+});
 
 const mockAxiosDeleteAll = jest.fn();
 mockAxiosDeleteAll.mockReturnValueOnce({ status: 200 });
@@ -18,6 +24,9 @@ jest.mock('axios', () => ({
 describe('ExportedFilesDisplay', () => {
   beforeEach(() => {
     exportedFiles.value = [];
+  });
+  afterEach(() => {
+    mockAxiosGet.mockClear();
   });
 
   it('has a headline', () => {
@@ -89,5 +98,24 @@ describe('ExportedFilesDisplay', () => {
     await flushPromises();
     expect(mockAxiosDeleteAll).toHaveBeenCalled();
     expect(exportedFiles.value.length).toBe(2);
+  });
+
+  test('download an exported file', async () => {
+    exportedFiles.value = ['text.pdf'];
+
+    const w = mount(ExportedFilesDisplay);
+    await w.find('.btn--download').trigger('click');
+    await flushPromises();
+    expect(mockAxiosGet).toHaveBeenCalled();
+    expect(mockAxiosGet).toHaveBeenCalledWith(
+      `http://localhost:4000/download/text.pdf`
+    );
+  });
+
+  it('gets the current project name as a prop', () => {
+    const w = mount(ExportedFilesDisplay, {
+      props: { projectName: 'test project' },
+    });
+    expect(w.props().projectName).toBe('test project');
   });
 });

@@ -5,15 +5,16 @@ section.exported-files-display
     p.fallback-text--empty Keine exportierten Dateien vorhanden.
   template(v-else)
     .exported-files__list
-      template(v-for='file in exportedFiles')
+      template(v-for='filename in exportedFiles')
         .exported-file
-          span {{ file }}
-          button.btn--icon.btn--download
+          span {{ filename }}
+          button.btn--icon.btn--download(@click='downLoadFile(filename)')
             IconSVG(name='download')
     button.btn--delete.btn--delete-all(@click='deleteAllFiles') Alle exportierten Dateien löschen
 </template>
 
 <script lang="ts">
+import Axios from 'axios';
 import { defineComponent, onMounted } from 'vue';
 import useFileHandler from '../composables/file-handler';
 import IconSVG from './vfx/icons/IconSVG.vue';
@@ -23,14 +24,51 @@ export default defineComponent({
   components: {
     IconSVG,
   },
-  setup: () => {
+  props: {
+    projectName: {
+      type: String,
+      required: true,
+      default: 'sample project',
+    },
+  },
+  setup: (props) => {
     const {
       exportedFiles,
       fetchExportedFiles,
       deleteAllFiles,
     } = useFileHandler();
+
+    function createDownloadLink(filenamePrefix: string, data: ArrayBuffer) {
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.style.display = 'none';
+      const blob = new Blob([new Uint8Array(data)]);
+      const url = window.URL.createObjectURL(blob);
+      a.href = url;
+      a.download = `${filenamePrefix}-units.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    }
+
+    async function downLoadFile(filename: string) {
+      try {
+        const res = await Axios.get(
+          `http://localhost:4000/download/${filename}`
+        );
+        if (res.status === 200)
+          createDownloadLink(props.projectName, res.data.file.data);
+      } catch (error) {
+        return;
+      }
+    }
+
     onMounted(async () => await fetchExportedFiles());
-    return { exportedFiles, deleteAllFiles };
+    return {
+      exportedFiles,
+      deleteAllFiles,
+      downLoadFile,
+    };
   },
 });
 </script>
