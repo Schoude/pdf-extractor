@@ -132,7 +132,7 @@ export default defineComponent({
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-content: center;
-  padding: 1em 2em;
+  // padding: 1em 2em;
 }
 
 .col {

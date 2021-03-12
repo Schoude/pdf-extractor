@@ -1,7 +1,7 @@
 <template lang="pug">
 main.viz
   .viz-box.viz-box__file-size
-    h1 Dateigrößen im Vergleich
+    h2 Dateigrößen im Vergleich
 </template>
 
 <script lang="ts">
@@ -208,12 +208,8 @@ export default defineComponent({
 <style lang="scss">
 @use '../style/style' as *;
 
-.viz {
-  padding: 2em;
-}
-
 .viz-box {
-  h1 {
+  h2 {
     margin-left: 30px;
   }
 }

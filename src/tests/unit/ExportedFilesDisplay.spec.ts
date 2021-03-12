@@ -56,6 +56,9 @@ describe('ExportedFilesDisplay', () => {
       expect(
         w.findAll('.exported-file')[i].find('.btn--download').exists()
       ).toBe(true);
+      expect(
+        w.findAll('.exported-file')[i].find('.btn--download').attributes().title
+      ).toBe('Datei herunterladen');
     });
   });
 

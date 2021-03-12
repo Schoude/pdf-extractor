@@ -8,7 +8,10 @@ section.exported-files-display
       template(v-for='filename in exportedFiles')
         .exported-file
           span {{ filename }}
-          button.btn--icon.btn--download(@click='downLoadFile(filename)')
+          button.btn--icon.btn--download(
+            @click='downLoadFile(filename)',
+            title='Datei herunterladen'
+          )
             IconSVG(name='download')
     button.btn--delete.btn--delete-all(@click='deleteAllFiles') Alle exportierten Dateien löschen
 </template>

@@ -1,6 +1,6 @@
 <template lang="pug">
 TheHeader
-RouterView
+RouterView.page
 </template>
 
 <script lang="ts">
@@ -19,5 +19,9 @@ export default defineComponent({
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.page {
+  padding: 1em 6em;
 }
 </style>
