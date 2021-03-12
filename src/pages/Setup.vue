@@ -15,55 +15,45 @@ main.setup
               type='submit',
               form='extract-data',
               :disabled='isLoading'
-            ) PDFs abschicken ({{ loadedFileNames.length }})
+            ) PDFs abschicken ({{ files.length }})
         .container(v-if='files.length > 0')
           h3 {{ files.length }} Dateien geladen
-          .loaded-files
-            div(v-for='filename of loadedFileNames') {{ filename }}
+          LoadedFilesList(:files='files')
   .col
     ExportedFilesDisplay(:projectName='projectName')
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import Axios from 'axios';
 import useFileHandler from '../composables/file-handler';
 import ExportedFilesDisplay from '../components/ExportedFilesDisplay.vue';
 import ExtractionOptionsEditor from '../components/ExtractionOptionsEditor.vue';
+import LoadedFilesList from '../components/layout/lists/LoadedFilesList.vue';
+import useExtractionOptions from '../composables/extraction-options';
 
 export default defineComponent({
   name: 'Setup',
   components: {
     ExtractionOptionsEditor,
+    LoadedFilesList,
     ExportedFilesDisplay,
   },
   setup: () => {
+    const { fetchExportedFiles, files, clearFiles } = useFileHandler();
     const {
-      loadedFileNames,
-      fetchExportedFiles,
-      exportedFiles,
-      files,
-      clearFiles,
-      deleteAllFiles,
-    } = useFileHandler();
+      floorGuidString,
+      projectName,
+      roomMatcher,
+      sizeMatcher,
+    } = useExtractionOptions();
     const isLoading = ref(false);
-    const projectName = ref('elf-freunde');
-    const roomMatcher = ref('\\d-Zimmer');
-    const sizeMatcher = ref('Gesamt-Wohn-Nutzfläche');
-
-    const floorGuidString = ref(
-      'f07d83ac-4cb3-4dba-8e6d-68111609ae2f\nd4656ce9-3137-46c7-b386-b2b67f4c673e\n74e9cf9b-9ec6-4d57-a26a-580dd1562d52\nb18e2bf6-0559-404a-ab11-155c6d30d278\n2140f5e6-8dfc-430a-ab75-b2f858a3c2f7\nbe1d7218-1e3d-432e-9567-dcb69fb2150b'
-    );
-    const floorsCount = computed(
-      () => floorGuidString.value.split('\n').length
-    );
 
     async function openDirectoryHandle() {
       // @ts-ignore new Chrome File System API
       const dirHandle = await showDirectoryPicker();
       for await (const entry of dirHandle.values()) {
         if (entry.kind !== 'file' || !/(?:.pdf$)/.test(entry.name)) return;
-        loadedFileNames.value.push(entry.name as string);
         const fileHandle = await dirHandle.getFileHandle(entry.name, {
           create: true,
         });
@@ -107,18 +97,11 @@ export default defineComponent({
 
     return {
       isLoading,
-      projectName,
-      roomMatcher,
-      sizeMatcher,
-      floorGuidString,
-      floorsCount,
       openDirectoryHandle,
-      loadedFileNames,
       files,
       postData,
-      exportedFiles,
-      deleteAllFiles,
       clearFiles,
+      projectName,
     };
   },
 });
@@ -132,7 +115,6 @@ export default defineComponent({
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-content: center;
-  // padding: 1em 2em;
 }
 
 .col {
@@ -159,13 +141,5 @@ export default defineComponent({
 
 .container__button {
   margin-top: 1em;
-}
-
-.loaded-files {
-  font-weight: 300;
-  max-height: 500px;
-  overflow: auto;
-  padding-right: 1em;
-  @include scrollbar(true);
 }
 </style>

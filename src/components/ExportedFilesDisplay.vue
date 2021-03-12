@@ -9,7 +9,7 @@ section.exported-files-display
         .exported-file
           span {{ filename }}
           button.btn--icon.btn--download(
-            @click='downLoadFile(filename)',
+            @click='downloadFile(filename)',
             title='Datei herunterladen'
           )
             IconSVG(name='download')
@@ -54,7 +54,7 @@ export default defineComponent({
       a.remove();
     }
 
-    async function downLoadFile(filename: string) {
+    async function downloadFile(filename: string) {
       try {
         const res = await Axios.get(
           `http://localhost:4000/download/${filename}`
@@ -70,7 +70,7 @@ export default defineComponent({
     return {
       exportedFiles,
       deleteAllFiles,
-      downLoadFile,
+      downloadFile,
     };
   },
 });
