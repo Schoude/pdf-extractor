@@ -18,9 +18,9 @@ function useFileHandler() {
   const deleteAllFiles = async () => {
     try {
       const res = await Axios.post('http://localhost:4000/export/delete-all');
-      if (res.status === 200) fetchExportedFiles();
+      if (res.status === 200) exportedFiles.value = [];
     } catch (error) {
-      console.log(error.message);
+      return;
     }
   };
 

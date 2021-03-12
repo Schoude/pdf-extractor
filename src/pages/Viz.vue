@@ -1,5 +1,5 @@
 <template lang="pug">
-section.viz
+main.viz
   .viz-box.viz-box__file-size
     h1 Dateigrößen im Vergleich
 </template>
