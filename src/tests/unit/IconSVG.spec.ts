@@ -19,10 +19,26 @@ describe('IconSVG', () => {
     expect(w.attributes().width).toBe('20');
   });
 
-  it('sets the path and the viewBox according to the given icon name', () => {
-    const w = mount(IconSVG, { props: { name: 'download' } });
-    expect(w.attributes().viewBox).toBe(icons.download.viewBox);
-    expect(w.find('path').attributes().d).toBe(icons.download.path);
+  it('sets the paths, the viewBox and existing classes according to the given icon name', () => {
+    const w = mount(IconSVG, { props: { name: 'arrow-alt-square-left' } });
+    expect(w.attributes().viewBox).toBe(icons['arrow-alt-square-left'].viewBox);
+
+    icons['arrow-alt-square-left'].paths.forEach((pathData, i) => {
+      expect(w.findAll('path')[i].attributes().d).toBe(pathData.d);
+      if (pathData.class) {
+        expect(w.findAll('path')[i].classes()).toContain(pathData.class);
+      }
+    });
+
+    const wAlt = mount(IconSVG, { props: { name: 'download' } });
+    expect(wAlt.attributes().viewBox).toBe(icons['download'].viewBox);
+
+    icons['download'].paths.forEach((pathData, i) => {
+      expect(wAlt.findAll('path')[i].attributes().d).toBe(pathData.d);
+      if (pathData.class) {
+        expect(wAlt.findAll('path')[i].classes()).toContain(pathData.class);
+      }
+    });
   });
 
   it('is display: inline-block by default', () => {

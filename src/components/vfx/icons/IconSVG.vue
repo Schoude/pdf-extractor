@@ -8,7 +8,8 @@ svg.icon-svg(
   :viewBox='selectedIcon.viewBox',
   style='display: inline-block'
 )
-  path(:d='selectedIcon.path')
+  template(v-for='path of selectedIcon.paths')
+    path(:d='path.d', :class='path.class')
 </template>
 
 <script lang="ts">
@@ -40,5 +41,12 @@ export default defineComponent({
 });
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
+.icon-path--primary {
+  opacity: 1;
+}
+
+.icon-path--secondary {
+  opacity: 0.4;
+}
 </style>
