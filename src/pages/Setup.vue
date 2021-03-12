@@ -3,44 +3,7 @@ main.setup
   .col
     h2 Extrahierungs-Optionen
     .col__content
-      form#extract-data.container(name='extract-data')
-        .form-field
-          label(for='project-name') Projektname
-          input#project-name(
-            type='text',
-            name='project-name',
-            v-model.trim='projectName',
-            required
-          )
-        .form-field
-          label(for='room-matcher') Matcher Raumanzahl (regex)
-          input#room-matcher(
-            type='text',
-            name='room-matcher',
-            v-model.trim='roomMatcher',
-            required
-          )
-          span
-            code /{{ roomMatcher }}/g
-        .form-field
-          label(for='size-matcher') Matcher Wohnfläche (regex)
-          input#size-matcher(
-            type='text',
-            name='size-matcher',
-            v-model.trim='sizeMatcher',
-            required
-          )
-          span
-            code /{{ sizeMatcher }}/g
-        .form-field
-          label Etagen-Guids <small>(jede in neuer Zeile - Start mit EG oder KG)</small>
-          textarea(
-            rows='6',
-            cols='50',
-            v-model.trim='floorGuidString',
-            required
-          )
-          pre {{ floorsCount }} Etagen erkannt
+      ExtractionOptionsEditor
       .container.container__select
         div
           button(@click='openDirectoryHandle', tp) PDFs Ordner auswählen
@@ -66,10 +29,12 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 import Axios from 'axios';
 import useFileHandler from '../composables/file-handler';
 import ExportedFilesDisplay from '../components/ExportedFilesDisplay.vue';
+import ExtractionOptionsEditor from '../components/ExtractionOptionsEditor.vue';
 
 export default defineComponent({
   name: 'Setup',
   components: {
+    ExtractionOptionsEditor,
     ExportedFilesDisplay,
   },
   setup: () => {
@@ -194,62 +159,6 @@ export default defineComponent({
 
 .container__button {
   margin-top: 1em;
-}
-
-.form-field {
-  margin-bottom: 1em;
-
-  & + .form-field {
-    margin-top: 1em;
-  }
-
-  label,
-  input {
-    display: block;
-  }
-
-  label {
-    margin-bottom: 0.5em;
-    font-weight: 600;
-  }
-
-  input {
-    background: transparent;
-    color: currentColor;
-    border: 1px solid rgba(255, 255, 255, 0.336);
-    padding: 0.5em;
-    width: 100%;
-    transition: all 0.2s ease;
-
-    &:hover {
-      border: 1px solid rgba(255, 255, 255, 0.5);
-    }
-
-    &:focus {
-      outline: none;
-      background: rgba($color-accent, 0.12);
-      border: 1px solid rgba(255, 255, 255, 1);
-    }
-  }
-
-  textarea {
-    resize: none;
-    background: transparent;
-    color: currentColor;
-    border: 1px solid rgba(255, 255, 255, 0.336);
-    padding: 0.5em;
-    transition: all 0.2s ease;
-
-    &:hover {
-      border: 1px solid rgba(255, 255, 255, 0.5);
-    }
-
-    &:focus {
-      outline: none;
-      background: rgba($color-accent, 0.12);
-      border: 1px solid rgba(255, 255, 255, 1);
-    }
-  }
 }
 
 .loaded-files {
