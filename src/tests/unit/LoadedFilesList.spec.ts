@@ -31,4 +31,17 @@ describe('LoadedFilesList', () => {
       expect(listItem.text()).toBe(files[index].name);
     });
   });
+
+  test('each list item has a button to view the PDF in a viewer', () => {
+    const w = factory();
+    w.findAll('.loaded-files-list__list-item').forEach((listItem) => {
+      expect(listItem.find('.btn--pdf-viewer').exists()).toBe(true);
+      expect(listItem.find('.btn--pdf-viewer').attributes().title).toBe(
+        'Als PDF ansehen'
+      );
+      expect(listItem.find('.btn--pdf-viewer').attributes().type).toBe(
+        'button'
+      );
+    });
+  });
 });
