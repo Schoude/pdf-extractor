@@ -16,9 +16,14 @@ const mockAxiosDeleteAll = jest.fn();
 mockAxiosDeleteAll.mockReturnValueOnce({ status: 200 });
 mockAxiosDeleteAll.mockRejectedValueOnce(new Error('failed'));
 
+const mockAxiosDelete = jest.fn();
+mockAxiosDelete.mockReturnValueOnce({ status: 200 });
+mockAxiosDelete.mockRejectedValueOnce(new Error('failed'));
+
 jest.mock('axios', () => ({
   get: (url: string) => mockAxiosGet(url),
   post: (url: string) => mockAxiosDeleteAll(url),
+  delete: (url: string) => mockAxiosDelete(url),
 }));
 
 describe('ExportedFilesDisplay', () => {
@@ -44,7 +49,7 @@ describe('ExportedFilesDisplay', () => {
     expect(w.find('.btn--delete-all').exists()).toBe(false);
   });
 
-  it('lists the exported files - with name and download button', () => {
+  it('lists the exported files - with name and download button and a delete button', () => {
     const { exportedFiles } = useFileHandler();
     exportedFiles.value = ['text.pdf', 'text2.pdf'];
     const w = mount(ExportedFilesDisplay);
@@ -59,6 +64,13 @@ describe('ExportedFilesDisplay', () => {
       expect(
         w.findAll('.exported-file')[i].find('.btn--download').attributes().title
       ).toBe('Datei herunterladen');
+      expect(
+        w.findAll('.exported-file')[i].find('.btn--delete--single').exists()
+      ).toBe(true);
+      expect(
+        w.findAll('.exported-file')[i].find('.btn--delete--single').attributes()
+          .title
+      ).toBe('Datei löschen');
     });
   });
 
@@ -112,6 +124,25 @@ describe('ExportedFilesDisplay', () => {
     expect(mockAxiosGet).toHaveBeenCalled();
     expect(mockAxiosGet).toHaveBeenCalledWith(
       `http://localhost:4000/download/text.pdf`
+    );
+  });
+
+  test('delete an exported file', async () => {
+    exportedFiles.value = ['text.pdf'];
+
+    const w = mount(ExportedFilesDisplay);
+    await w.find('.btn--delete--single').trigger('click');
+    await flushPromises();
+    expect(mockAxiosDelete).toHaveBeenCalled();
+    expect(mockAxiosDelete).toHaveBeenCalledWith(
+      `http://localhost:4000/delete/text.pdf`
+    );
+
+    await w.find('.btn--delete--single').trigger('click');
+    await flushPromises();
+    expect(mockAxiosDelete).toHaveBeenCalled();
+    expect(mockAxiosDelete).toHaveBeenCalledWith(
+      `http://localhost:4000/delete/text.pdf`
     );
   });
 

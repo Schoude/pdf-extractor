@@ -13,6 +13,11 @@ section.exported-files-display
             title='Datei herunterladen'
           )
             IconSVG(name='download')
+          button.btn--icon.btn--delete.btn--delete--single(
+            @click='deleteSingleFile(filename)',
+            title='Datei löschen'
+          )
+            IconSVG(name='trash-alt')
     button.btn--delete.btn--delete-all(@click='deleteAllFiles') Alle exportierten Dateien löschen
 </template>
 
@@ -66,11 +71,25 @@ export default defineComponent({
       }
     }
 
+    async function deleteSingleFile(filename: string) {
+      try {
+        const res = await Axios.delete(
+          `http://localhost:4000/delete/${filename}`
+        );
+        if (res.status === 200) {
+          await fetchExportedFiles();
+        }
+      } catch (error) {
+        return;
+      }
+    }
+
     onMounted(async () => await fetchExportedFiles());
     return {
       exportedFiles,
       deleteAllFiles,
       downloadFile,
+      deleteSingleFile,
     };
   },
 });
