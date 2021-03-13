@@ -4,15 +4,14 @@ const cors = require('cors');
 const multer = require('multer');
 const { setupFloorsMap, extractFromPDFBlobs } = require('./pdf-extraction');
 
-const upload = multer();
+const mulipart = multer();
 const app = express();
 const port = 4000;
 
 app.use(cors());
-app.options('*', cors());
+app.use(mulipart.any());
 
-app.use(upload.any());
-
+// website static files
 app.use(express.static(__dirname + '/dist', { index: 'index.html' }));
 
 app.get('/export', (req, res) => {
@@ -95,6 +94,29 @@ app.post('/export/delete-all', (req, res) => {
   });
 });
 
+app.delete('/delete/:filename', (req, res) => {
+  if (process.version.includes('v12')) {
+    fs.unlink(`../export/${req.params.filename}`, (err) => {
+      if (err) {
+        res.status(500);
+        res.send();
+      }
+      res.status(200);
+      res.send();
+    });
+  } else {
+    fs.rm(`../export/${req.params.filename}`, (err) => {
+      if (err) {
+        res.status(500);
+        res.send();
+      }
+      res.status(200);
+      res.send();
+    });
+  }
+});
+
+// SPA routing
 app.get('*', (req, res) => {
   res.sendFile(__dirname + '/dist/index.html');
 });
