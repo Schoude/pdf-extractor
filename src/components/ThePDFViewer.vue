@@ -7,7 +7,17 @@ section.the-pdf-viewer
       small Geladene Datei: {{ previewPDFFile.name }}
   .pdf-viewer(v-if='previewPDFFile')
     .pdf-viewer__actions
+      button.btn--icon.btn--delete.btn--delete--single(
+        @click='removePDFPreview',
+        title='PDF-Vorschau leeren'
+      )
+        IconSVG(name='trash-alt')
       .pdf-viewer__actions__buttons
+        button.btn--icon.btn__fullscreen(
+          @click='toggleFullScreen',
+          title='Im Vollbild anzeigen'
+        )
+          IconSVG(name='expand', color='white')
         button.btn--icon.btn__prev(
           @click='showPrevPage',
           title='Vorherige Seite'
@@ -109,6 +119,14 @@ export default defineComponent({
       queueRenderPage(currentPage.value);
     }
 
+    function removePDFPreview() {
+      previewPDFFile.value = null;
+    }
+
+    async function toggleFullScreen() {
+      await theCanvas.value?.requestFullscreen();
+    }
+
     onMounted(() => {
       if (previewPDFFile.value) {
         ctx.value = (theCanvas.value as HTMLCanvasElement).getContext('2d');
@@ -138,6 +156,8 @@ export default defineComponent({
       maxPages,
       showNextPage,
       showPrevPage,
+      removePDFPreview,
+      toggleFullScreen,
     };
   },
 });
@@ -170,9 +190,17 @@ h2 {
   margin-left: auto;
 }
 
-.pages-info {
+.pages-info,
+.btn--delete--single {
   position: absolute;
   top: 0;
+}
+
+.btn--delete--single {
+  left: 0;
+}
+
+.pages-info {
   right: 0;
   transform: translateY(50%);
 }
