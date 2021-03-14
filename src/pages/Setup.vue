@@ -11,6 +11,7 @@ main.setup
           LoadedFilesList(:files='files')
   .col
     ExportedFilesDisplay(:projectName='projectName')
+    ThePDFViewer
 </template>
 
 <script lang="ts">
@@ -21,6 +22,7 @@ import ExtractionOptionsEditor from '../components/ExtractionOptionsEditor.vue';
 import LoadedFilesList from '../components/layout/lists/LoadedFilesList.vue';
 import useExtractionOptions from '../composables/extraction-options';
 import ExtractionOptionsActions from '../components/ExtractionOptionsActions.vue';
+import ThePDFViewer from '../components/ThePDFViewer.vue';
 
 export default defineComponent({
   name: 'Setup',
@@ -29,6 +31,7 @@ export default defineComponent({
     ExtractionOptionsActions,
     LoadedFilesList,
     ExportedFilesDisplay,
+    ThePDFViewer,
   },
   setup: () => {
     const { files } = useFileHandler();
@@ -73,5 +76,9 @@ export default defineComponent({
 
 .container__button {
   margin-top: 1em;
+}
+
+.exported-files-display {
+  margin-bottom: 1em;
 }
 </style>

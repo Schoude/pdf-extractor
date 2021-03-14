@@ -1,6 +1,7 @@
 import { computed, ref, Ref } from 'vue';
 import Axios from 'axios';
-
+import usePDFPreview from './pdf-preview';
+const { setPreviewPDF } = usePDFPreview();
 const files: Ref<File[]> = ref([]);
 const exportedFiles: Ref<string[]> = ref([]);
 const filesLoaded = computed(() => files.value.length > 0);
@@ -12,6 +13,7 @@ function useFileHandler() {
   };
   const clearFiles = () => {
     files.value = [];
+    setPreviewPDF(null);
   };
   const deleteAllFiles = async () => {
     try {

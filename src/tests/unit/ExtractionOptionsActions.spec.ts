@@ -1,7 +1,9 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import ExtractionOptionsActions from '../../components/ExtractionOptionsActions.vue';
 import useFileHandler from '../../composables/file-handler';
+import usePDFPreview from '../../composables/pdf-preview';
 const { files } = useFileHandler();
+const { setPreviewPDF, previewPDFFile } = usePDFPreview();
 
 const mockAxiosGet = jest.fn();
 const mockAxiosPost = jest.fn();
@@ -62,10 +64,14 @@ describe('ExtractionOptionsActions', () => {
     expect(w.find('.btn--submit').attributes().type).toBe('submit');
   });
 
-  test('the loaded files can be removed', async () => {
+  test('the loaded files can be removed - also empties the preview pdf file', async () => {
+    const file = new File([], `sample.jpg`, { type: 'image/img' });
+    setPreviewPDF(file);
+
     const w = mountWithFilesLoaded();
     await w.find('.btn--delete').trigger('click');
     expect(files.value.length).toBe(0);
+    expect(previewPDFFile.value).toBe(null);
   });
 
   test('the loaded files get send to backend', async () => {
