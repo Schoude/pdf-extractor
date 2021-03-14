@@ -1,5 +1,7 @@
 import { mount } from '@vue/test-utils';
 import LoadedFilesList from '../../components/layout/lists/LoadedFilesList.vue';
+import usePDFPreview from '../../composables/pdf-preview';
+const { previewPDFFile } = usePDFPreview();
 
 let files: File[] = [];
 
@@ -43,5 +45,20 @@ describe('LoadedFilesList', () => {
         'button'
       );
     });
+  });
+
+  test('select the file to be display as the preview PDF', async () => {
+    const w = factory();
+    await w.find('.btn--pdf-viewer').trigger('click');
+    expect(previewPDFFile.value).not.toBe(null);
+  });
+
+  it('disables the show preview button for the selected preview file', async () => {
+    const w = factory();
+    await w.find('.btn--pdf-viewer').trigger('click');
+    expect(w.find('.btn--pdf-viewer').attributes()).toHaveProperty('disabled');
+    expect(w.find('.btn--pdf-viewer').attributes().title).toBe(
+      'Datei ist bereits ausgewählt'
+    );
   });
 });
