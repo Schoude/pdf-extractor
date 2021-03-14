@@ -71,8 +71,8 @@ button {
 .btn--delete {
   border-color: rgba($color-danger, 0.363);
 
-  &:hover,
-  &:focus {
+  &:not(:disabled):hover,
+  &:not(:disabled):focus {
     background-color: rgba($color-danger, 0.363);
   }
 }
@@ -81,8 +81,8 @@ button {
   font-weight: 600;
   border-color: rgba($color-accent, 0.363);
 
-  &:hover,
-  &:focus {
+  &:not(:disabled):hover,
+  &:not(:disabled):focus {
     background-color: rgba($color-accent, 0.363);
   }
 

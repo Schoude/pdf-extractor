@@ -22,6 +22,6 @@ export default defineComponent({
 }
 
 .page {
-  padding: 1em 6em;
+  padding: 1em 4em;
 }
 </style>

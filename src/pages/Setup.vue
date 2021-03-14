@@ -50,6 +50,7 @@ export default defineComponent({
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-content: center;
+  gap: 1.5em;
 }
 
 .col {
@@ -80,5 +81,10 @@ export default defineComponent({
 
 .exported-files-display {
   margin-bottom: 1em;
+}
+
+.the-pdf-viewer {
+  width: 100%;
+  flex: 1;
 }
 </style>

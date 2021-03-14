@@ -3,7 +3,9 @@ export type SVGIconNames =
   | 'download'
   | 'alicorn'
   | 'arrow-alt-square-left'
-  | 'trash-alt';
+  | 'trash-alt'
+  | 'arrow-right'
+  | 'arrow-left';
 interface PathData {
   d: string;
   class?: string;
@@ -82,6 +84,36 @@ export default {
       {
         d:
           'M380.66 280.87a95.78 95.78 0 1 1-184.87-50.18 47.85 47.85 0 0 0 66.9-66.9 95.3 95.3 0 0 1 118 117.08z',
+        class: 'icon-path--primary',
+      },
+    ],
+  } as SVGAttrs,
+  'arrow-right': {
+    viewBox: '0 0 448 512',
+    paths: [
+      {
+        d:
+          'M24 215h286.4l41.6 41-41.59 41H24c-13.3 0-24-11-24-24.63v-32.82A24.22 24.22 0 0 1 24 215z',
+        class: 'icon-path--secondary',
+      },
+      {
+        d:
+          'M246.31 38.52c.24.23.48.47.71.71L441 238.56a25 25 0 0 1 0 34.78L247 472.77a23.38 23.38 0 0 1-33.11.7c-.24-.22-.47-.46-.7-.7L191.06 450a25.13 25.13 0 0 1 .4-35.18L352.19 256 191.46 97.2a24.94 24.94 0 0 1-.4-35.18l22.15-22.78a23.38 23.38 0 0 1 33.1-.72z',
+        class: 'icon-path--primary',
+      },
+    ],
+  } as SVGAttrs,
+  'arrow-left': {
+    viewBox: '0 0 448 512',
+    paths: [
+      {
+        d:
+          'M424 297H137.6L96 256l41.59-41H424c13.3 0 24 11 24 24.63v32.82A24.22 24.22 0 0 1 424 297z',
+        class: 'icon-path--secondary',
+      },
+      {
+        d:
+          'M201.69 473.48l-.71-.71L7 273.44a25 25 0 0 1 0-34.78L201 39.23a23.38 23.38 0 0 1 33.11-.7c.24.22.47.46.7.7L256.94 62a25.13 25.13 0 0 1-.4 35.18L95.81 256l160.73 158.8a24.94 24.94 0 0 1 .4 35.18l-22.15 22.78a23.38 23.38 0 0 1-33.1.72z',
         class: 'icon-path--primary',
       },
     ],
