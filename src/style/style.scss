@@ -1,4 +1,5 @@
 @use 'resets' as *;
+@use 'scrollbar' as *;
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700');
 
 $color-accent: #73ba9b;
@@ -47,6 +48,7 @@ body {
   background-color: #02010a;
   color: whitesmoke;
   font-family: 'Quicksand', sans-serif;
+  @include scrollbar(true)
 }
 
 button {

@@ -21,6 +21,11 @@ const routes: Array<RouteRecordRaw> = [
       next();
     },
   },
+  {
+    path: '/csv',
+    name: 'CSVPreview',
+    component: () => import('../pages/CSVPreview.vue'),
+  },
 ];
 
 const router = createRouter({

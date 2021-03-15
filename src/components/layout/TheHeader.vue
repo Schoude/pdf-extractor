@@ -12,7 +12,7 @@ header.the-header
     router-link.router-link.route-csv(
       :class='{ disabled: exportedFiles.length === 0 }',
       to='/csv'
-    ) CSV
+    ) CSV-Preview
 </template>
 
 <script lang="ts">
