@@ -122,4 +122,16 @@ describe('CSVRenderer', () => {
       mockCSVData.headers.length
     );
   });
+
+  it('renders the rows', () => {
+    const w = factory();
+    expect(w.findAll('.csv-row').length).toBe(mockCSVData.rows.length);
+  });
+
+  it('renders the calls for each row', () => {
+    const w = factory();
+    expect(w.find('.csv-row').findAll('.csv-cell').length).toBe(
+      mockCSVData.rows[0].length
+    );
+  });
 });

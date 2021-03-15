@@ -1,6 +1,6 @@
 <template lang="pug">
 section.csv-preview 
-  h2 Wähle eine CSV-Datei aus um ihren Inhalt anzuzeigen
+  h2 Wähle eine CSV-Datei aus, um ihren Inhalt anzuzeigen
   CSVRenderer(:csvData='selectedCSV')
 </template>
 

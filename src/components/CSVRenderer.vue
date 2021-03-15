@@ -5,6 +5,11 @@
     .csv-headers
       template(v-for='cell in csvData.headers')
         span.csv-cell {{ cell }}
+    .csv-rows
+      template(v-for='row in csvData.rows.sort()')
+        .csv-row
+          template(v-for='cell in row')
+            span.csv-cell(:title='cell') {{ cell ? cell : "&nbsp;" }}
 </template>
 
 <script lang="ts">
@@ -29,15 +34,30 @@ export default defineComponent({
 
 .csv-headers {
   border: 2px solid white;
+  display: flex;
   .csv-cell + .csv-cell {
     border-left: 2px solid white;
   }
+}
+
+.csv-rows {
+  border: 1px solid white;
+}
+
+.csv-row {
+  display: flex;
 }
 
 .csv-cell {
   line-height: 1.2;
   padding: 0.5em;
   display: inline-block;
-  min-width: 200px;
+  width: 250px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  & + .csv-cell {
+    border-left: 1px solid white;
+  }
 }
 </style>
