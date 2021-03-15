@@ -2,16 +2,18 @@ import { flushPromises, mount } from '@vue/test-utils';
 import useFileHandler from '../../composables/file-handler';
 import useCSVRenderer from '../../composables/csv-renderer';
 import CSVPreview from '../../pages/CSVPreview.vue';
+import { mockCSVData } from './CSVRenderer.spec';
 const { exportedFiles } = useFileHandler();
 const { selectedCSV } = useCSVRenderer();
 
 const mockAxiosGet = jest.fn();
+mockAxiosGet.mockReturnValue({ data: { ...mockCSVData } });
 
 jest.mock('axios', () => ({ get: (url: string) => mockAxiosGet(url) }));
 
 describe('CSVPreview', () => {
   beforeEach(() => {
-    exportedFiles.value = ['elf-freunde-units.csv'];
+    exportedFiles.value = ['test-export-units.csv'];
   });
 
   afterEach(() => {
@@ -26,12 +28,20 @@ describe('CSVPreview', () => {
   });
 
   it('selects the first exported csv, if no other is selected', async () => {
-    const w = mount(CSVPreview);
+    mount(CSVPreview);
     await flushPromises();
-    expect(selectedCSV.name).toBe('elf-freunde-units.csv');
     expect(mockAxiosGet).toHaveBeenCalled();
     expect(mockAxiosGet).toHaveBeenCalledWith(
-      'http://localhost:4000/csv-preview/elf-freunde-units.csv'
+      'http://localhost:4000/csv-preview/test-export-units.csv'
     );
+
+    expect(selectedCSV.name).toBe('test-export-units.csv');
+    expect(selectedCSV.headers).toStrictEqual(mockCSVData.headers);
+    expect(selectedCSV.rows).toStrictEqual(mockCSVData.rows);
+  });
+
+  it('shows the CSVRenderer', () => {
+    const w = mount(CSVPreview);
+    expect(w.findComponent({ name: 'CSVPreview' }).exists()).toBe(true);
   });
 });
