@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import useFileHandler from '../composables/file-handler';
 import Setup from '../pages/Setup.vue';
-const { filesLoaded } = useFileHandler();
+const { filesLoaded, exportedFiles } = useFileHandler();
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -25,6 +25,13 @@ const routes: Array<RouteRecordRaw> = [
     path: '/csv',
     name: 'CSVPreview',
     component: () => import('../pages/CSVPreview.vue'),
+    beforeEnter: (to, from, next) => {
+      if (exportedFiles.value.length === 0) {
+        next({ name: 'Setup' });
+        return;
+      }
+      next();
+    },
   },
 ];
 
