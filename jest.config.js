@@ -21,6 +21,7 @@ module.exports = {
     '**/src/composables/**/*.{ts,vue}',
     '**/src/components/**/*.{ts,vue}',
     '**/src/pages/**/*.{ts,vue}',
+    '!**/src/components/ThePDFViewer.vue',
     '!**/node_modules/**',
     '!**/dist/**',
     '!**/coverage/**',

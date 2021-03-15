@@ -9,6 +9,10 @@ header.the-header
       :class='{ disabled: !filesLoaded }',
       to='/viz'
     ) Viz
+    router-link.router-link.route-csv(
+      :class='{ disabled: exportedFiles.length === 0 }',
+      to='/csv'
+    ) CSV
 </template>
 
 <script lang="ts">
@@ -22,9 +26,10 @@ export default defineComponent({
     IconSVG,
   },
   setup: () => {
-    const { filesLoaded } = useFileHandler();
+    const { filesLoaded, exportedFiles } = useFileHandler();
     return {
       filesLoaded,
+      exportedFiles,
     };
   },
 });
