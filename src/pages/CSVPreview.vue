@@ -20,7 +20,7 @@ export default defineComponent({
     const { selectedCSV, fetchFileData } = useCSVRenderer();
 
     onBeforeMount(async () => {
-      if (selectedCSV.name === '') {
+      if (selectedCSV.name === '' || selectedCSV.headers.length === 0) {
         await fetchFileData(exportedFiles.value[0]);
       }
     });

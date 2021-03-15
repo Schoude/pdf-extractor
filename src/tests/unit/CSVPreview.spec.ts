@@ -23,7 +23,7 @@ describe('CSVPreview', () => {
   it('shows a description', () => {
     const w = mount(CSVPreview);
     expect(w.find('h2').text()).toBe(
-      'Wähle eine CSV-Datei aus um ihren Inhalt anzuzeigen'
+      'Wähle eine CSV-Datei aus, um ihren Inhalt anzuzeigen'
     );
   });
 

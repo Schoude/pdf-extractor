@@ -13,6 +13,11 @@ section.exported-files-display
             title='Datei herunterladen'
           )
             IconSVG(name='download')
+          button.btn--icon.btn--csv-preview(
+            @click='showInCSVPreview(filename)',
+            title='Preview anschauen'
+          )
+            IconSVG(name='eye')
           button.btn--icon.btn--delete.btn--delete--single(
             @click='deleteSingleFile(filename)',
             title='Datei löschen'
@@ -24,6 +29,8 @@ section.exported-files-display
 <script lang="ts">
 import Axios from 'axios';
 import { defineComponent, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import useCSVRenderer from '../composables/csv-renderer';
 import useFileHandler from '../composables/file-handler';
 import IconSVG from './vfx/icons/IconSVG.vue';
 
@@ -45,6 +52,8 @@ export default defineComponent({
       fetchExportedFiles,
       deleteAllFiles,
     } = useFileHandler();
+    const { selectedCSV } = useCSVRenderer();
+    const router = useRouter();
 
     function createDownloadLink(filenamePrefix: string, data: ArrayBuffer) {
       const a = document.createElement('a');
@@ -84,12 +93,18 @@ export default defineComponent({
       }
     }
 
+    function showInCSVPreview(filename: string) {
+      selectedCSV.name = filename;
+      router.push('/csv');
+    }
+
     onMounted(async () => await fetchExportedFiles());
     return {
       exportedFiles,
       deleteAllFiles,
       downloadFile,
       deleteSingleFile,
+      showInCSVPreview,
     };
   },
 });

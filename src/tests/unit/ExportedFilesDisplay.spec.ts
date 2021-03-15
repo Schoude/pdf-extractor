@@ -1,6 +1,8 @@
 import { flushPromises, mount } from '@vue/test-utils';
 import ExportedFilesDisplay from '../../components/ExportedFilesDisplay.vue';
+import useCSVRenderer from '../../composables/csv-renderer';
 import useFileHandler from '../../composables/file-handler';
+import 'vue-router-mock';
 const { exportedFiles } = useFileHandler();
 
 const mockAxiosGet = jest.fn();
@@ -64,6 +66,13 @@ describe('ExportedFilesDisplay', () => {
       expect(
         w.findAll('.exported-file')[i].find('.btn--download').attributes().title
       ).toBe('Datei herunterladen');
+      expect(
+        w.findAll('.exported-file')[i].find('.btn--csv-preview').exists()
+      ).toBe(true);
+      expect(
+        w.findAll('.exported-file')[i].find('.btn--csv-preview').attributes()
+          .title
+      ).toBe('Preview anschauen');
       expect(
         w.findAll('.exported-file')[i].find('.btn--delete--single').exists()
       ).toBe(true);
@@ -151,5 +160,19 @@ describe('ExportedFilesDisplay', () => {
       props: { projectName: 'test project' },
     });
     expect(w.props().projectName).toBe('test project');
+  });
+
+  it('an svg can be opened in the preview', async () => {
+    const { exportedFiles } = useFileHandler();
+    const { selectedCSV } = useCSVRenderer();
+    exportedFiles.value = ['text.pdf', 'text2.pdf'];
+    const w = mount(ExportedFilesDisplay);
+    const csvPreviewBtn = w
+      .findAll('.exported-file')[0]
+      .find('.btn--csv-preview');
+    await csvPreviewBtn.trigger('click');
+    expect(selectedCSV.name).toBe(exportedFiles.value[0]);
+    await w.router.getPendingNavigation();
+    expect(w.router.currentRoute.value.path).toBe('/csv');
   });
 });

@@ -109,7 +109,8 @@ button {
   }
 }
 
-.btn--pdf-viewer {
+.btn--pdf-viewer,
+.btn--csv-preview {
   svg {
     path {
       fill: #73ba9b;
