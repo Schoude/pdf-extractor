@@ -35,6 +35,23 @@ app.get('/download/:fileName', (req, res) => {
   }
 });
 
+app.get('/csv-preview/:fileName', async (req, res) => {
+  try {
+    const file = fs.readFileSync(`../export/${req.params.fileName}`, {
+      encoding: 'utf8',
+    });
+    const partsRaw = file.split('\n').filter((row) => row !== '');
+    const headers = partsRaw.shift().split(';');
+    const rows = partsRaw.map((rowRaw) => rowRaw.split(';'));
+
+    res.status(200);
+    res.send({ headers, rows });
+  } catch (error) {
+    res.status(404);
+    res.send({ message: 'File not found' });
+  }
+});
+
 app.post('/pdf', async (req, res) => {
   let status;
   const roomMatcher = new RegExp(req.body.roomMatcher, 'g'),
