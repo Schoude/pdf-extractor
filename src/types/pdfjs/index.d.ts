@@ -13,5 +13,3 @@ export interface CustomWindow extends Window {
     GlobalWorkerOptions;
   };
 }
-
-declare module 'pdfjs';
