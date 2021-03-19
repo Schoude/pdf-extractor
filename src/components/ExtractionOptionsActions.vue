@@ -5,7 +5,7 @@
     button.btn--delete(@click='clearFiles') Dateien leeren
   template(v-if='files.length > 0')
     button.btn--submit(
-      @click.prevent='postData',
+      @submit.prevent='postData',
       type='submit',
       form='extract-data',
       :disabled='isLoading'
