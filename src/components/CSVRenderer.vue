@@ -1,6 +1,5 @@
 <template lang="pug">
 .csv-renderer
-  p.csv-name {{ csvData.name }}
   .csv-renderer__content
     .csv-headers
       template(v-for='cell in csvData.headers')

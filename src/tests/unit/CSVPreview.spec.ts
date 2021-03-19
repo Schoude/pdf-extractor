@@ -44,4 +44,9 @@ describe('CSVPreview', () => {
     const w = mount(CSVPreview);
     expect(w.findComponent({ name: 'CSVPreview' }).exists()).toBe(true);
   });
+
+  it('shows a MBSelect', () => {
+    const w = mount(CSVPreview);
+    expect(w.findComponent({ name: 'MBSelect' }).exists()).toBe(true);
+  });
 });

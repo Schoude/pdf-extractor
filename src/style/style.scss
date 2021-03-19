@@ -1,5 +1,6 @@
 @use 'resets' as *;
 @use 'scrollbar' as *;
+@use 'transitions';
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700');
 
 $color-accent: #73ba9b;
@@ -48,13 +49,13 @@ body {
   background-color: #02010a;
   color: whitesmoke;
   font-family: 'Quicksand', sans-serif;
-  @include scrollbar(true)
+  @include scrollbar(true);
 }
 
 button {
   padding: 0.5em 1em;
   border: 1px solid whitesmoke;
-  transition: background-color 0.2s ease, opacity .2s ease;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
   outline: none;
   border-radius: 4px;
 
@@ -65,7 +66,7 @@ button {
   }
 
   &:disabled {
-    opacity: .5;
+    opacity: 0.5;
     cursor: not-allowed;
   }
 }

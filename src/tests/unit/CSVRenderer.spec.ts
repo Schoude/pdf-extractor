@@ -110,11 +110,6 @@ describe('CSVRenderer', () => {
     expect(w.props().csvData).toStrictEqual(mockCSVData);
   });
 
-  it('displays the name of the currently selected csv', () => {
-    const w = factory();
-    expect(w.find('.csv-name').text()).toBe(mockCSVData.name);
-  });
-
   it('renders headers row', () => {
     const w = factory();
     expect(w.find('.csv-headers').exists()).toBe(true);
