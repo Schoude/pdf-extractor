@@ -206,7 +206,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use '../style/style' as *;
+@use '../style/colors' as *;
 
 .viz-box {
   h2 {
