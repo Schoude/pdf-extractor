@@ -5,6 +5,7 @@ const { setPreviewPDF } = usePDFPreview();
 const files: Ref<File[]> = ref([]);
 const exportedFiles: Ref<string[]> = ref([]);
 const filesLoaded = computed(() => files.value.length > 0);
+const isLoading = ref(false);
 
 function useFileHandler() {
   const fetchExportedFiles = async () => {
@@ -31,6 +32,7 @@ function useFileHandler() {
     clearFiles,
     deleteAllFiles,
     filesLoaded,
+    isLoading,
   };
 }
 

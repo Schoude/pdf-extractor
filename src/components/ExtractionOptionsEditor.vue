@@ -1,31 +1,37 @@
 <template lang="pug">
-form#extract-data.extraction-options-editor.container(name='extract-data')
+form#extract-data.extraction-options-editor.container(
+  name='extract-data',
+  @submit.prevent='postData'
+)
   .form-field
-    label(for='project-name') Projektname
-    input#project-name(
-      type='text',
-      name='project-name',
+    MBTextField#project-name(
+      v-model.trim='projectName',
+      name='projekt-name',
       required,
-      v-model.trim='projectName'
+      autocomplete='off'
     )
+      template(#label)
+        | Projektname
   .form-field
-    label(for='room-matcher') Matcher Raumanzahl (RegExp)
-    input#room-matcher(
-      type='text',
+    MBTextField#room-matcher(
+      v-model.trim='roomMatcher',
       name='room-matcher',
       required,
-      v-model.trim='roomMatcher'
+      autocomplete='off'
     )
+      template(#label)
+        | Matcher Raumanzahl (RegExp)
     span
       code {{ roomMatcherRegExp }}
   .form-field
-    label(for='size-matcher') Matcher Wohnfläche (RegExp)
-    input#size-matcher(
-      type='text',
+    MBTextField#size-matcher(
+      v-model.trim='sizeMatcher',
       name='size-matcher',
       required,
-      v-model.trim='sizeMatcher'
+      autocomplete='off'
     )
+      template(#label)
+        | Matcher Wohnfläche (RegExp)
     span
       code {{ sizeMatcherRegExp }}
   .form-field
@@ -42,9 +48,15 @@ form#extract-data.extraction-options-editor.container(name='extract-data')
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 import useExtractionOptions from '../composables/extraction-options';
+import useFileHandler from '../composables/file-handler';
+import MBTextField from './ui/MBTextField.vue';
+import Axios from 'axios';
 
 export default defineComponent({
   name: 'ExtractionOptionsEditor',
+  components: {
+    MBTextField,
+  },
   setup: () => {
     const {
       floorGuidString,
@@ -53,9 +65,43 @@ export default defineComponent({
       sizeMatcher,
       floorsCount,
     } = useExtractionOptions();
+    const { files, fetchExportedFiles, isLoading } = useFileHandler();
 
-    const roomMatcherRegExp = computed(() => `/${roomMatcher.value}}/g`);
-    const sizeMatcherRegExp = computed(() => `/${sizeMatcher.value}}/g`);
+    const roomMatcherRegExp = computed(() => `/${roomMatcher.value}/g`);
+    const sizeMatcherRegExp = computed(() => `/${sizeMatcher.value}/g`);
+
+    async function setupFormData() {
+      const formData = new FormData();
+
+      files.value.forEach((file) => {
+        formData.append(file.name, file);
+      });
+
+      return formData;
+    }
+
+    async function postData() {
+      isLoading.value = true;
+      const formData = await setupFormData();
+
+      formData.append('projectName', projectName.value);
+      formData.append('roomMatcher', roomMatcher.value);
+      formData.append('sizeMatcher', sizeMatcher.value);
+      formData.append('floorGuidString', floorGuidString.value);
+
+      try {
+        const res = await Axios.post('http://localhost:4000/pdf', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        if (res.status === 200) fetchExportedFiles();
+      } catch (error) {
+        return;
+      } finally {
+        isLoading.value = false;
+      }
+    }
 
     return {
       projectName,
@@ -65,6 +111,7 @@ export default defineComponent({
       sizeMatcherRegExp,
       floorGuidString,
       floorsCount,
+      postData,
     };
   },
 });
@@ -74,10 +121,8 @@ export default defineComponent({
 @use '../style/colors' as *;
 
 .form-field {
-  margin-bottom: 1em;
-
   & + .form-field {
-    margin-top: 1em;
+    margin-top: 3em;
   }
 
   label,
