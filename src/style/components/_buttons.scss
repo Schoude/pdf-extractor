@@ -1,0 +1,76 @@
+@use '../colors' as *;
+
+button {
+  padding: 0.5em 1em;
+  border: 1px solid whitesmoke;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  outline: none;
+  border-radius: 4px;
+
+  &:not(:disabled):hover,
+  &:not(:disabled):focus,
+  &:not(:disabled):active {
+    background-color: rgba(245, 245, 245, 0.12);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn--delete {
+  border-color: rgba($color-danger, 0.363);
+
+  &:not(:disabled):hover,
+  &:not(:disabled):focus {
+    background-color: rgba($color-danger, 0.363);
+  }
+}
+
+.btn--submit {
+  font-weight: 600;
+  border-color: rgba($color-accent, 0.363);
+
+  &:not(:disabled):hover,
+  &:not(:disabled):focus {
+    background-color: rgba($color-accent, 0.363);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn--icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    path {
+      fill: white;
+    }
+  }
+}
+
+.btn--pdf-viewer,
+.btn--csv-preview {
+  svg {
+    path {
+      fill: #73ba9b;
+    }
+  }
+
+  &:disabled {
+    svg {
+      path {
+        fill: #999999;
+      }
+    }
+  }
+}

@@ -114,7 +114,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '../../style/style';
+@use '../../style/colors' as *;
 
 .mb-select {
   padding: 14px 10px;

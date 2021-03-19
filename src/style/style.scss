@@ -1,128 +1,14 @@
+@use 'colors' as *;
 @use 'resets' as *;
 @use 'scrollbar' as *;
 @use 'transitions';
+@use 'components/buttons';
+@use 'external/vue-overrides';
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700');
-
-$color-accent: #73ba9b;
-$color-danger: #a30000;
-
-.router-link {
-  color: whitesmoke;
-  text-decoration: none;
-  font-size: 1.1rem;
-  font-weight: 600;
-  transition: opacity 0.2s ease;
-
-  &::after {
-    content: '';
-    display: block;
-    margin: 0 auto;
-    height: 2px;
-    width: 0%;
-    background-color: $color-accent;
-    opacity: 0;
-    transition: opacity 0.25s ease-out, width 0.25s ease;
-  }
-
-  &:hover,
-  &:active {
-    &::after {
-      width: 100%;
-      opacity: 1;
-    }
-  }
-
-  &.disabled {
-    pointer-events: none;
-    opacity: 0.2;
-  }
-}
-
-.router-link-exact-active {
-  &::after {
-    width: 100%;
-    opacity: 1;
-  }
-}
 
 body {
   background-color: #02010a;
   color: whitesmoke;
   font-family: 'Quicksand', sans-serif;
   @include scrollbar(true);
-}
-
-button {
-  padding: 0.5em 1em;
-  border: 1px solid whitesmoke;
-  transition: background-color 0.2s ease, opacity 0.2s ease;
-  outline: none;
-  border-radius: 4px;
-
-  &:not(:disabled):hover,
-  &:not(:disabled):focus,
-  &:not(:disabled):active {
-    background-color: rgba(245, 245, 245, 0.12);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-.btn--delete {
-  border-color: rgba($color-danger, 0.363);
-
-  &:not(:disabled):hover,
-  &:not(:disabled):focus {
-    background-color: rgba($color-danger, 0.363);
-  }
-}
-
-.btn--submit {
-  font-weight: 600;
-  border-color: rgba($color-accent, 0.363);
-
-  &:not(:disabled):hover,
-  &:not(:disabled):focus {
-    background-color: rgba($color-accent, 0.363);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-.btn--icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5em;
-
-  svg {
-    width: 20px;
-    height: 20px;
-    path {
-      fill: white;
-    }
-  }
-}
-
-.btn--pdf-viewer,
-.btn--csv-preview {
-  svg {
-    path {
-      fill: #73ba9b;
-    }
-  }
-
-  &:disabled {
-    svg {
-      path {
-        fill: #999999;
-      }
-    }
-  }
 }

@@ -1,0 +1,22 @@
+@use 'colors' as *;
+
+@mixin underline($pseudo: 'after') {
+  &::#{$pseudo} {
+    content: '';
+    display: block;
+    margin: 0 auto;
+    height: 2px;
+    width: 0%;
+    background-color: $color-accent;
+    opacity: 0;
+    transition: opacity 0.25s ease-out, width 0.25s ease;
+  }
+
+  &:hover,
+  &:active {
+    &::#{$pseudo} {
+      width: 100%;
+      opacity: 1;
+    }
+  }
+}

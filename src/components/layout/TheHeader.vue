@@ -36,7 +36,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../../style/style' as *;
+@use '../../style/colors' as *;
 
 .the-header {
   background-color: #0f0e15;

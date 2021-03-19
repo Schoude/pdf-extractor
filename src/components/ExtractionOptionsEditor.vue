@@ -71,7 +71,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../style/style' as *;
+@use '../style/colors' as *;
 
 .form-field {
   margin-bottom: 1em;
