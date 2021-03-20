@@ -73,19 +73,4 @@ describe('ExtractionOptionsActions', () => {
     expect(files.value.length).toBe(0);
     expect(previewPDFFile.value).toBe(null);
   });
-
-  test('the loaded files get send to backend', async () => {
-    mockAxiosPost.mockReturnValueOnce({ status: 200 });
-    mockAxiosGet.mockReturnValueOnce({
-      data: { files: ['text.pdf', 'text2.pdf'] },
-    });
-    const w = mountWithFilesLoaded();
-    await w.find('.btn--submit').trigger('click');
-    await flushPromises();
-    expect(mockAxiosPost).toHaveBeenCalled();
-    expect(mockAxiosPost).toHaveBeenCalledWith('http://localhost:4000/pdf');
-
-    mockAxiosPost.mockRejectedValueOnce(new Error('failed'));
-    await w.find('.btn--submit').trigger('click');
-  });
 });

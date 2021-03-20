@@ -10,7 +10,7 @@ main.setup
           h3 {{ files.length }} Dateien geladen
           LoadedFilesList(:files='files')
   .col
-    ExportedFilesDisplay(:projectName='projectName')
+    ExportedFilesDisplay
     ThePDFViewer
 </template>
 

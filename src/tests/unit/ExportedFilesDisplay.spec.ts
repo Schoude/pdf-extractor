@@ -155,13 +155,6 @@ describe('ExportedFilesDisplay', () => {
     );
   });
 
-  it('gets the current project name as a prop', () => {
-    const w = mount(ExportedFilesDisplay, {
-      props: { projectName: 'test project' },
-    });
-    expect(w.props().projectName).toBe('test project');
-  });
-
   it('an svg can be opened in the preview', async () => {
     const { exportedFiles } = useFileHandler();
     const { selectedCSV } = useCSVRenderer();

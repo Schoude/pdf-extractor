@@ -25,38 +25,33 @@ describe('ExtractionOptionsEditor', () => {
 
   it('has three text inputs with tree labels and a label for the textarea', () => {
     const w = factory();
-    expect(w.findAll('input[type="text"]').length).toBe(3);
-    expect(w.findAll('label').length).toBe(4);
+    expect(w.findAllComponents({ name: 'MBTextField' }).length).toBe(3);
   });
 
   test('all inputs are required', () => {
     const w = factory();
-    w.findAll('input[type="text"]').forEach((input) => {
+    w.findAllComponents({ name: 'MBTextField' }).forEach((input) => {
+      console.log(input);
+
       expect(input.attributes()).toHaveProperty('required');
     });
   });
 
   test('the inputs have a default value filled in', () => {
     const w = factory();
-    const inputProjectName = w.find('#project-name');
-    const inputRoomMatcher = w.find('#room-matcher');
-    const inputSizeMatcher = w.find('#size-matcher');
+    const inputProjectName = w.findComponent('#project-name');
+    const inputRoomMatcher = w.findComponent('#room-matcher');
+    const inputSizeMatcher = w.findComponent('#size-matcher');
 
-    expect((inputProjectName.element as HTMLInputElement).value).toBe(
-      projectName
-    );
-    expect((inputRoomMatcher.element as HTMLInputElement).value).toBe(
-      roomMatcher
-    );
-    expect((inputSizeMatcher.element as HTMLInputElement).value).toBe(
-      sizeMatcher
-    );
+    expect(inputProjectName.props().modelValue).toBe(projectName);
+    expect(inputRoomMatcher.props().modelValue).toBe(roomMatcher);
+    expect(inputSizeMatcher.props().modelValue).toBe(sizeMatcher);
   });
 
   it('shows the generated RegExp that will be used', () => {
     const w = factory();
-    expect(w.vm.roomMatcherRegExp).toBe(`/${roomMatcher}}/g`);
-    expect(w.vm.sizeMatcherRegExp).toBe(`/${sizeMatcher}}/g`);
+    expect(w.vm.roomMatcherRegExp).toBe(`/${roomMatcher}/g`);
+    expect(w.vm.sizeMatcherRegExp).toBe(`/${sizeMatcher}/g`);
   });
 
   it('has a textarea for the floor guids', () => {

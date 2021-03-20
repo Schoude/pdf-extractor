@@ -39,14 +39,7 @@ export default defineComponent({
   components: {
     IconSVG,
   },
-  props: {
-    projectName: {
-      type: String,
-      required: true,
-      default: 'sample project',
-    },
-  },
-  setup: (props) => {
+  setup: () => {
     const {
       exportedFiles,
       fetchExportedFiles,
@@ -55,14 +48,14 @@ export default defineComponent({
     const { selectedCSV } = useCSVRenderer();
     const router = useRouter();
 
-    function createDownloadLink(filenamePrefix: string, data: ArrayBuffer) {
+    function createDownloadLink(filename: string, data: ArrayBuffer) {
       const a = document.createElement('a');
       document.body.appendChild(a);
       a.style.display = 'none';
       const blob = new Blob([new Uint8Array(data)]);
       const url = window.URL.createObjectURL(blob);
       a.href = url;
-      a.download = `${filenamePrefix}-units.csv`;
+      a.download = `${filename}`;
       a.click();
       window.URL.revokeObjectURL(url);
       a.remove();
@@ -74,7 +67,7 @@ export default defineComponent({
           `http://localhost:4000/download/${filename}`
         );
         if (res.status === 200)
-          createDownloadLink(props.projectName, res.data.file.data);
+          createDownloadLink(filename, res.data.file.data);
       } catch (error) {
         return;
       }
