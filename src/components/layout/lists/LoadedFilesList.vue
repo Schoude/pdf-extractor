@@ -9,6 +9,7 @@ ul.loaded-files-list
         :disabled='isPreviewFile(file)'
       )
         IconSVG(name='eye')
+        MBRipple(centered)
       span.text {{ file.name }}
 </template>
 
@@ -16,11 +17,13 @@ ul.loaded-files-list
 import { computed, defineComponent, PropType } from 'vue';
 import usePDFPreview from '../../../composables/pdf-preview';
 import IconSVG from '../../vfx/icons/IconSVG.vue';
+import MBRipple from '../../vfx/MBRipple.vue';
 
 export default defineComponent({
   name: 'LoadedFilesList',
   components: {
     IconSVG,
+    MBRipple,
   },
   props: {
     files: {

@@ -1,22 +1,32 @@
 <template lang="pug">
 .extraction-options-actions
-  button.btn__directory-picker(@click='openDirectoryHandle') PDFs Ordner auswählen
+  button.btn__directory-picker(@click='openDirectoryHandle')
+    | PDFs Ordner auswählen
+    MBRipple
   template(v-if='files.length > 0')
-    button.btn--delete(@click='clearFiles') Dateien leeren
+    button.btn--delete(@click='clearFiles')
+      | Dateien leeren
+      MBRipple
   template(v-if='files.length > 0')
     button.btn--submit(
       type='submit',
       form='extract-data',
       :disabled='isLoading'
-    ) PDFs abschicken ({{ files.length }})
+    ) 
+      | PDFs abschicken ({{ files.length }})
+      MBRipple
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useFileHandler from '../composables/file-handler';
+import MBRipple from './vfx/MBRipple.vue';
 
 export default defineComponent({
   name: 'ExtractionOptionsActions',
+  components: {
+    MBRipple,
+  },
   setup: () => {
     const { files, clearFiles, isLoading } = useFileHandler();
 
