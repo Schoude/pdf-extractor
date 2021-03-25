@@ -51,9 +51,21 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@use '../style/media' as *;
+
+h2 {
+  font-size: 1.2rem;
+  @include mq(laptop) {
+    font-size: revert;
+  }
+}
+
 .mb-select {
-  width: 350px;
   margin: 1.5em 0;
+
+  @include mq(laptop) {
+    width: 350px;
+  }
 
   &:deep(.selected-item) {
     font-weight: 600;

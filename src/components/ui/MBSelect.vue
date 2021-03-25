@@ -115,15 +115,19 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @use '../../style/colors' as *;
+@use '../../style/_media' as *;
 
 .mb-select {
-  padding: 14px 10px;
+  padding: 7px;
   background-color: #fff;
   color: #02010a;
   position: relative;
   cursor: pointer;
   border-radius: 4px;
   transition: background-color 0.25s ease;
+  @include mq(laptop) {
+    padding: 14px 10px;
+  }
 
   &:focus {
     outline: none;
@@ -142,17 +146,23 @@ export default defineComponent({
   left: 0;
   right: 0;
   background-color: white;
-  padding: 12px 0;
+  padding: 6px 0;
   border-radius: 4px;
   max-height: 300px;
   overflow: auto;
+  @include mq(laptop) {
+    padding: 12px 0;
+  }
 }
 
 .mb-select__list-item {
   color: #02010a;
   outline: none;
-  padding: 14px;
+  padding: 10px;
   transition: background-color 0.25s ease, color 0.25s ease;
+  @include mq(laptop) {
+    padding: 14px;
+  }
 
   &.selected {
     background-color: rgba(#02010a, 0.7);
