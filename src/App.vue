@@ -16,12 +16,18 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@use '../src/style/media' as *;
+
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .page {
-  padding: 1em 4em;
+  padding: 1em 0.5em;
+
+  @include mq(laptop) {
+    padding: 1em 4em;
+  }
 }
 </style>

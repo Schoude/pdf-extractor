@@ -37,13 +37,25 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @use '../../style/colors' as *;
+@use '../../style/media' as *;
 
 .the-header {
+  padding: 0.2em 0;
   background-color: #0f0e15;
-  height: 56px;
-  padding: 0 12em;
+  height: 65px;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @include mq(tablet) {
+    padding: 0 8em;
+    height: 56px;
+  }
+
+  @include mq(laptop) {
+    padding: 0 12em;
+  }
 }
 
 .logo {
@@ -54,7 +66,11 @@ export default defineComponent({
 
   h1 {
     font-weight: 300;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
+
+    @include mq(laptop) {
+      font-size: 1.3rem;
+    }
   }
 
   * + * {
@@ -63,10 +79,13 @@ export default defineComponent({
 }
 
 nav {
-  margin-left: auto;
   display: flex;
   a + a {
     margin-left: 1.5em;
+  }
+
+  @include mq(tablet) {
+    margin-left: auto;
   }
 }
 

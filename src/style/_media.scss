@@ -1,0 +1,16 @@
+$breakpoints: (
+  phone: 375px,
+  tablet: 768px,
+  tablet-landscape: 1024px,
+  laptop: 1280px,
+  desktop: 1440px,
+  desktop-large: 1920px,
+  4k: 2560px,
+);
+
+@mixin mq($bp: 'phone') {
+  $size: map-get($breakpoints, $bp);
+  @media only screen and (min-width: $size) {
+    @content;
+  }
+}

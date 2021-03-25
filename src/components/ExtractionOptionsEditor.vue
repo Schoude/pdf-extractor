@@ -36,12 +36,7 @@ form#extract-data.extraction-options-editor.container(
       code {{ sizeMatcherRegExp }}
   .form-field
     label Etagen-Guids <small>(jede in neuer Zeile - Start mit EG oder KG)</small>
-    textarea.input__floors(
-      rows='6',
-      cols='50',
-      required,
-      v-model.trim='floorGuidString'
-    )
+    textarea.input__floors(rows='6', required, v-model.trim='floorGuidString')
     pre.floors-count {{ floorsCount }} Etagen erkannt
 </template>
 
@@ -155,6 +150,7 @@ export default defineComponent({
   }
 
   textarea {
+    width: 100%;
     resize: none;
     background: transparent;
     color: currentColor;

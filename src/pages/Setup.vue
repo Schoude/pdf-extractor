@@ -46,11 +46,15 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@use '../style/_media' as *;
+
 .setup {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  justify-content: center;
-  gap: 1.5em;
+  @include mq(tablet-landscape) {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5em;
+  }
 }
 
 .col {
@@ -58,10 +62,23 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
 
+  & + & {
+    margin-top: 1.5em;
+
+    @include mq(laptop) {
+      margin-top: 0;
+    }
+  }
+
   &__content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2em;
+    width: 100%;
+
+    @include mq(laptop) {
+      display: grid;
+      gap: 1em;
+      grid-template-columns: 1fr 1fr;
+      gap: 2em;
+    }
   }
 
   h2 {

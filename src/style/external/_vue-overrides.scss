@@ -1,12 +1,16 @@
 @use '../mixins';
+@use '../media' as *;
 
 .router-link {
   color: whitesmoke;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 0.8rem;
   font-weight: 600;
   transition: opacity 0.2s ease;
   @include mixins.underline();
+  @include mq(laptop) {
+    font-size: 1.1rem;
+  }
 
   &.disabled {
     pointer-events: none;
